@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>摸球可能性模拟器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    
+    <!-- 配置Tailwind自定义颜色和字体 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        danger: '#EF4444',
+                        light: '#F3F4F6',
+                        dark: '#1F2937'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .ball-shadow {
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), inset 0 2px 4px -1px rgba(255, 255, 255, 0.3);
+            }
+            .bag-gradient {
+                background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-green-50 min-h-screen font-sans text-dark">
+    <div class="container mx-auto px-3 py-4 max-w-6xl">
+        <!-- 页面标题 -->
+        <header class="text-center mb-4">
+            <h1 class="text-[clamp(1.5rem,3vw,2.2rem)] font-bold text-primary mb-1">摸球可能性模拟器</h1>
+            <p class="text-gray-600 text-sm sm:text-base">探索可能性的奥秘：5个红球与5个绿球的随机抽取实验</p>
+        </header>
+        
+        <!-- 主要内容区域 -->
+        <main class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <!-- 左侧：控制面板和图表 (占1/4宽度) -->
+            <div class="lg:col-span-1 space-y-4">
+                <!-- 速度控制 -->
+                <div id="speed-control" class="hidden bg-white rounded-xl shadow-md p-3 transition-all duration-300">
+                    <h2 class="text-base font-semibold mb-2 flex items-center">
+                        <i class="fa fa-tachometer text-primary mr-2"></i>模拟速度调节
+                    </h2>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa fa-clock-o text-gray-500 text-sm"></i>
+                        <input type="range" id="speed-slider" min="1" max="100" value="50" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <i class="fa fa-bolt text-yellow-500 text-sm"></i>
+                    </div>
+                </div>
+                
+                <!-- 模拟过程图表 -->
+                <div class="bg-white rounded-xl shadow-md p-3 transition-all duration-300">
+                    <h2 class="text-base font-semibold mb-2 flex items-center">
+                        <i class="fa fa-bar-chart text-primary mr-2"></i>模拟过程统计
+                    </h2>
+                    <div class="h-48">
+                        <canvas id="simulation-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：模拟区域和结果 (占3/4宽度) -->
+            <div class="lg:col-span-3 space-y-4">
+                <!-- 摸球模拟区域 -->
+                <div class="bg-white rounded-xl shadow-md p-4 transition-all duration-300">
+                    <div class="flex flex-col md:flex-row items-center justify-around gap-4">
+                        <!-- 透明袋子 -->
+                        <div class="flex flex-col items-center">
+                            <h3 class="text-sm font-medium mb-2">袋子中的球</h3>
+                            <div id="bag" class="bag-gradient border border-white/30 rounded-2xl w-40 h-48 flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-full h-3 bg-gray-300/70 rounded-t-2xl"></div>
+                                <div id="balls-container" class="flex flex-wrap justify-center items-center gap-1 p-2">
+                                    <!-- 红球和绿球将通过JS动态生成 -->
+                                </div>
+                            </div>
+                            <p class="mt-2 text-xs text-gray-600">5个红球和5个绿球</p>
+                        </div>
+                        
+                        <!-- 摸出的球 -->
+                        <div class="flex flex-col items-center">
+                            <h3 class="text-sm font-medium mb-2">摸出的球</h3>
+                            <div id="drawn-balls" class="bg-gray-100 rounded-2xl w-40 h-48 flex flex-wrap justify-center items-center p-2">
+                                <p id="no-drawn-text" class="text-gray-400 text-center text-sm">尚未开始模拟</p>
+                            </div>
+                            <div class="mt-2 flex justify-center gap-3">
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 rounded-full bg-red-500 mr-1"></div>
+                                    <span id="red-count" class="text-xs">0</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 rounded-full bg-green-500 mr-1"></div>
+                                    <span id="green-count" class="text-xs">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 模拟控制 -->
+                <div class="bg-white rounded-xl shadow-md p-4 transition-all duration-300">
+                    <h2 class="text-base font-semibold mb-3 flex items-center">
+                        <i class="fa fa-cogs text-primary mr-2"></i>模拟控制
+                    </h2>
+                    <div class="flex flex-col sm:flex-row gap-3 items-center">
+                        <div class="w-full sm:w-1/3">
+                            <label for="simulation-count" class="block text-xs font-medium text-gray-700 mb-1">模拟次数：</label>
+                            <input type="number" id="simulation-count" min="1" value="100" 
+                                   class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-sm">
+                        </div>
+                        <button id="start-simulation" class="w-full sm:w-auto px-4 py-1.5 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow transition-all transform hover:scale-105 text-sm">
+                            <i class="fa fa-play mr-1"></i> 开始模拟
+                        </button>
+                        <button id="stop-simulation" class="w-full sm:w-auto px-4 py-1.5 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg shadow transition-all transform hover:scale-105 text-sm hidden">
+                            <i class="fa fa-stop mr-1"></i> 停止模拟
+                        </button>
+                    </div>
+                    <div id="simulation-status" class="mt-2 text-center text-gray-600 text-sm hidden">
+                        正在进行模拟：<span id="current-step">0</span>/<span id="total-steps">0</span>
+                    </div>
+                    <div id="record-button-container" class="mt-2 text-center hidden">
+                        <button id="record-data" class="px-4 py-1.5 bg-accent hover:bg-accent/90 text-white font-medium rounded-lg shadow transition-all transform hover:scale-105 text-sm">
+                            <i class="fa fa-save mr-1"></i> 点击记录试验数据
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 试验数据记录 -->
+                <div class="bg-white rounded-xl shadow-md p-4 transition-all duration-300">
+                    <h2 class="text-base font-semibold mb-3 flex items-center">
+                        <i class="fa fa-table text-primary mr-2"></i>试验数据记录
+                    </h2>
+                    <div id="no-data-message" class="text-center text-gray-500 py-3 text-sm">
+                        暂无试验数据，请进行模拟并记录结果
+                    </div>
+                    <div id="experiment-data" class="overflow-x-auto hidden">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead>
+                                <tr>
+                                    <th class="px-2 py-2 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">试验次数</th>
+                                    <th class="px-2 py-2 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">总摸球次数</th>
+                                    <th class="px-2 py-2 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">红球次数</th>
+                                    <th class="px-2 py-2 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">绿球次数</th>
+                                    <th class="px-2 py-2 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">数量对比</th>
+                                </tr>
+                            </thead>
+                            <tbody id="experiment-results" class="bg-white divide-y divide-gray-200">
+                                <!-- 试验数据将通过JS动态添加 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- 页脚 -->
+        <footer class="mt-4 text-center text-gray-500 text-xs py-2">
+            <p>摸球可能性模拟器 | 用于概率教学与实验</p>
+        </footer>
+    </div>
+
+    <script>
+        // 全局变量
+        let simulationChart;
+        let isSimulating = false;
+        let simulationInterval;
+        let currentStep = 0;
+        let totalSteps = 0;
+        let redCount = 0;
+        let greenCount = 0;
+        let experimentNumber = 0;
+        let ballsInBag = [];
+        let drawnBalls = [];
+        // 批量更新计数器，避免过于频繁的DOM更新
+        let updateCounter = 0;
+        const UPDATE_THRESHOLD = 5; // 每5步更新一次UI
+        
+        // DOM 元素
+        const bagElement = document.getElementById('bag');
+        const ballsContainer = document.getElementById('balls-container');
+        const drawnBallsElement = document.getElementById('drawn-balls');
+        const noDrawnText = document.getElementById('no-drawn-text');
+        const redCountElement = document.getElementById('red-count');
+        const greenCountElement = document.getElementById('green-count');
+        const simulationCountInput = document.getElementById('simulation-count');
+        const startSimulationButton = document.getElementById('start-simulation');
+        const stopSimulationButton = document.getElementById('stop-simulation');
+        const speedControl = document.getElementById('speed-control');
+        const speedSlider = document.getElementById('speed-slider');
+        const simulationStatus = document.getElementById('simulation-status');
+        const currentStepElement = document.getElementById('current-step');
+        const totalStepsElement = document.getElementById('total-steps');
+        const recordButtonContainer = document.getElementById('record-button-container');
+        const recordDataButton = document.getElementById('record-data');
+        const noDataMessage = document.getElementById('no-data-message');
+        const experimentData = document.getElementById('experiment-data');
+        const experimentResults = document.getElementById('experiment-results');
+        
+        // 初始化球
+        function initializeBalls() {
+            ballsContainer.innerHTML = '';
+            ballsInBag = [];
+            
+            // 创建5个红球
+            for (let i = 0; i < 5; i++) {
+                const ball = createBall('red');
+                ballsContainer.appendChild(ball);
+                ballsInBag.push({ element: ball, color: 'red', inBag: true });
+            }
+            
+            // 创建5个绿球
+            for (let i = 0; i < 5; i++) {
+                const ball = createBall('green');
+                ballsContainer.appendChild(ball);
+                ballsInBag.push({ element: ball, color: 'green', inBag: true });
+            }
+            
+            // 随机排列球
+            shuffleBalls();
+        }
+        
+        // 创建球元素
+        function createBall(color) {
+            const ball = document.createElement('div');
+            ball.className = `w-6 h-6 rounded-full ball-shadow transition-all duration-50`;
+            ball.style.backgroundColor = color === 'red' ? '#EF4444' : '#10B981';
+            return ball;
+        }
+        
+        // 随机排列球
+        function shuffleBalls() {
+            for (let i = ballsInBag.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [ballsInBag[i], ballsInBag[j]] = [ballsInBag[j], ballsInBag[i]];
+            }
+            
+            // 更新DOM顺序
+            ballsContainer.innerHTML = '';
+            ballsInBag.forEach(ball => {
+                if (ball.inBag) {
+                    ballsContainer.appendChild(ball.element);
+                }
+            });
+        }
+        
+        // 初始化图表
+        function initializeChart() {
+            const ctx = document.getElementById('simulation-chart').getContext('2d');
+            
+            simulationChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['红球', '绿球'],
+                    datasets: [{
+                        label: '摸出次数',
+                        data: [0, 0],
+                        backgroundColor: [
+                            '#EF4444',
+                            '#10B981'
+                        ],
+                        borderColor: [
+                            '#DC2626',
+                            '#059669'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 50 // 极快的图表动画
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 开始模拟
+        function startSimulation() {
+            const count = parseInt(simulationCountInput.value);
+            if (isNaN(count) || count < 1) {
+                alert('请输入有效的模拟次数');
+                return;
+            }
+            
+            // 重置状态
+            resetSimulation();
+            
+            // 更新UI状态
+            isSimulating = true;
+            totalSteps = count;
+            startSimulationButton.classList.add('hidden');
+            stopSimulationButton.classList.remove('hidden');
+            speedControl.classList.remove('hidden');
+            simulationStatus.classList.remove('hidden');
+            noDrawnText.classList.add('hidden');
+            recordButtonContainer.classList.add('hidden');
+            
+            currentStepElement.textContent = '0';
+            totalStepsElement.textContent = totalSteps;
+            
+            // 开始模拟循环（使用requestAnimationFrame提高性能）
+            requestAnimationFrame(runSimulationStep);
+        }
+        
+        // 运行模拟步骤 - 相比上次版本再提速20倍（初始版本的400倍）
+        function runSimulationStep() {
+            if (!isSimulating || currentStep >= totalSteps) {
+                endSimulation();
+                return;
+            }
+            
+            // 随机选择一个球
+            const availableBalls = ballsInBag.filter(ball => ball.inBag);
+            const randomIndex = Math.floor(Math.random() * availableBalls.length);
+            const selectedBall = availableBalls[randomIndex];
+            
+            // 更新计数
+            if (selectedBall.color === 'red') {
+                redCount++;
+            } else {
+                greenCount++;
+            }
+            
+            currentStep++;
+            updateCounter++;
+            
+            // 减少DOM操作频率以提高性能
+            if (updateCounter >= UPDATE_THRESHOLD || currentStep === totalSteps) {
+                updateCounter = 0;
+                // 更新UI
+                redCountElement.textContent = redCount;
+                greenCountElement.textContent = greenCount;
+                currentStepElement.textContent = currentStep;
+                
+                // 更新图表
+                simulationChart.data.datasets[0].data = [redCount, greenCount];
+                simulationChart.update();
+            }
+            
+            // 快速循环下一步
+            if (isSimulating && currentStep < totalSteps) {
+                // 根据速度滑块调整延迟（极短延迟）
+                const speed = parseInt(speedSlider.value);
+                const delay = Math.max(0.02, (50 - (speed * 0.49)) / 1000); // 0.02ms - 25ms
+                
+                if (delay > 0.1) {
+                    // 较慢速度使用setTimeout
+                    setTimeout(runSimulationStep, delay);
+                } else {
+                    // 极快速度使用requestAnimationFrame提高性能
+                    requestAnimationFrame(runSimulationStep);
+                }
+            }
+        }
+        
+        // 结束模拟
+        function endSimulation() {
+            isSimulating = false;
+            
+            // 确保最终状态正确显示
+            redCountElement.textContent = redCount;
+            greenCountElement.textContent = greenCount;
+            currentStepElement.textContent = currentStep;
+            simulationChart.data.datasets[0].data = [redCount, greenCount];
+            simulationChart.update();
+            
+            // 更新UI状态
+            startSimulationButton.classList.remove('hidden');
+            stopSimulationButton.classList.add('hidden');
+            recordButtonContainer.classList.remove('hidden');
+        }
+        
+        // 停止模拟
+        function stopSimulation() {
+            isSimulating = false;
+            
+            // 确保当前状态正确显示
+            redCountElement.textContent = redCount;
+            greenCountElement.textContent = greenCount;
+            currentStepElement.textContent = currentStep;
+            
+            // 更新UI状态
+            startSimulationButton.classList.remove('hidden');
+            stopSimulationButton.classList.add('hidden');
+            recordButtonContainer.classList.remove('hidden');
+        }
+        
+        // 重置模拟
+        function resetSimulation() {
+            currentStep = 0;
+            redCount = 0;
+            greenCount = 0;
+            updateCounter = 0;
+            drawnBallsElement.innerHTML = '';
+            
+            redCountElement.textContent = '0';
+            greenCountElement.textContent = '0';
+            
+            // 重置图表
+            simulationChart.data.datasets[0].data = [0, 0];
+            simulationChart.update();
+            
+            // 将所有球放回袋子
+            ballsInBag.forEach(ball => {
+                ball.inBag = true;
+            });
+            
+            shuffleBalls();
+        }
+        
+        // 记录试验数据
+        function recordExperimentData() {
+            experimentNumber++;
+            
+            // 隐藏无数据消息，显示表格
+            noDataMessage.classList.add('hidden');
+            experimentData.classList.remove('hidden');
+            
+            // 创建对比图
+            const total = redCount + greenCount;
+            const redPercentage = total > 0 ? (redCount / total) * 100 : 0;
+            const greenPercentage = 100 - redPercentage;
+            
+            const comparisonBar = document.createElement('div');
+            comparisonBar.className = 'h-3 w-full flex rounded-full overflow-hidden';
+            
+            const redBar = document.createElement('div');
+            redBar.className = 'bg-red-500 transition-all duration-500';
+            redBar.style.width = `${redPercentage}%`;
+            
+            const greenBar = document.createElement('div');
+            greenBar.className = 'bg-green-500 transition-all duration-500';
+            greenBar.style.width = `${greenPercentage}%`;
+            
+            comparisonBar.appendChild(redBar);
+            comparisonBar.appendChild(greenBar);
+            
+            // 添加到表格
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-50 transition-colors';
+            row.innerHTML = `
+                <td class="px-2 py-2 whitespace-nowrap">${experimentNumber}</td>
+                <td class="px-2 py-2 whitespace-nowrap">${total}</td>
+                <td class="px-2 py-2 whitespace-nowrap">${redCount} (${redPercentage.toFixed(1)}%)</td>
+                <td class="px-2 py-2 whitespace-nowrap">${greenCount} (${greenPercentage.toFixed(1)}%)</td>
+                <td class="px-2 py-2 whitespace-nowrap"></td>
+            `;
+            
+            // 将对比图添加到单元格
+            row.lastElementChild.appendChild(comparisonBar);
+            
+            // 添加到表格并添加动画
+            experimentResults.appendChild(row);
+            setTimeout(() => {
+                row.classList.add('opacity-100');
+            }, 10);
+            
+            // 重置模拟UI
+            recordButtonContainer.classList.add('hidden');
+        }
+        
+        // 事件监听
+        startSimulationButton.addEventListener('click', startSimulation);
+        stopSimulationButton.addEventListener('click', stopSimulation);
+        recordDataButton.addEventListener('click', recordExperimentData);
+        
+        // 初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeBalls();
+            initializeChart();
+        });
+    </script>
+</body>
+</html>
