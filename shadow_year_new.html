@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generation-source" content="AI生成">
+  <title>小陈老师的AI工具</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .iframe-container {
+      box-sizing: border-box;
+      padding: 20px;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .content-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      border: 0.5px solid #C9DACC;
+      border-radius: 16px;
+    }
+
+    .ai-badge {
+      position: fixed;
+      right: 37px;
+      bottom: 37px;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 24px;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  </style>
+  <!-- 后端传值 【核心配置完整保留，无任何修改】 -->
+  <script>
+    window.__SERVER_DATA__ = {
+      watermarkChatId: "915859AC96CE9057C4E8327B1C2BD9A7",
+      watermarkEnv: "online",
+      watermarkUrl: "https://musk-online.fbcontent.cn/pub-musk-ai-studio/workflow/file/document/sfpN9CSgiULhgoUWyqvMA9.html",
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- 主要内容容器 -->
+  <div class="iframe-container">
+    <iframe class="content-iframe" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;全年日影变化规律汇总&lt;/title&gt;
+  &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chart.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2D593E',
+            secondary: '#EBEDD4',
+            accent: '#DC2626',
+            surface: '#FDFBF7'
+          },
+          boxShadow: {
+            'custom': '0 4px 20px rgba(45, 89, 62, 0.1)'
+          }
+        }
+      }
+    }
+  &lt;/script&gt;
+  &lt;style&gt;
+    body {
+      background-color: #EBEDD4;
+      font-family: &quot;Microsoft YaHei&quot;, sans-serif;
+    }
+    .btn-month {
+      transition: all 0.3s ease;
+    }
+    .btn-month.active {
+      background-color: #2D593E;
+      color: white;
+      border-color: #2D593E;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(45, 89, 62, 0.3);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* 动画效果 */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class=&quot;h-screen overflow-hidden bg-[#EBEDD4] font-sans&quot;&gt;
+  &lt;div class=&quot;flex h-full p-4 gap-4&quot;&gt;
+    &lt;!-- 左侧：图表区域 --&gt;
+    &lt;div class=&quot;flex-1 bg-surface rounded-2xl shadow-custom p-4 border border-[#d0d4c0] relative flex flex-col&quot;&gt;
+      &lt;header class=&quot;mb-2 flex-shrink-0 flex justify-between items-center&quot;&gt;
+        &lt;h1 class=&quot;text-2xl font-bold text-primary tracking-wide&quot;&gt;全年日影变化规律汇总&lt;/h1&gt;
+        &lt;p class=&quot;text-sm text-gray-500&quot;&gt;点击图表中的特殊点查看详细解说&lt;/p&gt;
+      &lt;/header&gt;
+      &lt;div class=&quot;flex-1 relative w-full min-h-0&quot;&gt;
+        &lt;canvas id=&quot;yearChart&quot;&gt;&lt;/canvas&gt;
+      &lt;/div&gt;
+      
+      &lt;!-- 弹窗容器 --&gt;
+      &lt;div id=&quot;infoModal&quot; class=&quot;hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur p-6 rounded-xl shadow-2xl border-2 border-primary max-w-md z-50 text-center transition-all duration-300&quot;&gt;
+        &lt;h3 id=&quot;modalTitle&quot; class=&quot;text-xl font-bold text-primary mb-2&quot;&gt;&lt;/h3&gt;
+        &lt;p id=&quot;modalDesc&quot; class=&quot;text-gray-700 leading-relaxed text-sm md:text-base&quot;&gt;&lt;/p&gt;
+        &lt;button onclick=&quot;document.getElementById('infoModal').classList.add('hidden')&quot; class=&quot;mt-4 px-6 py-1.5 bg-primary text-white hover:bg-opacity-90 rounded-lg text-sm font-bold transition-colors&quot;&gt;关闭&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 右侧：控制面板 --&gt;
+    &lt;div class=&quot;w-64 flex-shrink-0 bg-surface rounded-2xl shadow-custom p-4 border border-[#d0d4c0] flex flex-col overflow-y-auto no-scrollbar&quot;&gt;
+      &lt;h3 class=&quot;text-lg font-bold text-primary mb-3 text-center&quot;&gt;月份选择&lt;/h3&gt;
+      &lt;div class=&quot;grid grid-cols-3 gap-2 mb-6&quot; id=&quot;monthGrid&quot;&gt;
+        &lt;!-- 按钮由JS生成 --&gt;
+      &lt;/div&gt;
+      
+      &lt;div class=&quot;space-y-3 mb-6&quot;&gt;
+        &lt;button id=&quot;showAllBtn&quot; class=&quot;w-full py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 font-bold text-sm transition-colors shadow-sm&quot;&gt;
+          一键显示2年
+        &lt;/button&gt;
+        &lt;button id=&quot;focusBtn&quot; class=&quot;w-full py-2 bg-white border-2 border-primary text-primary rounded-lg hover:bg-blue-50 font-bold text-sm transition-colors shadow-sm&quot;&gt;
+          🔍 聚焦2025年
+        &lt;/button&gt;
+        &lt;button id=&quot;resetBtn&quot; class=&quot;w-full py-2 border-2 border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 font-bold text-sm transition-colors&quot;&gt;
+          重置画布
+        &lt;/button&gt;
+      &lt;/div&gt;
+      
+      &lt;!-- 辅助线控制 --&gt;
+      &lt;div class=&quot;mb-6 border-t border-gray-200 pt-4&quot;&gt;
+        &lt;h3 class=&quot;text-sm font-bold text-primary mb-2&quot;&gt;辅助线&lt;/h3&gt;
+        &lt;div class=&quot;space-y-2&quot;&gt;
+           &lt;button id=&quot;btnLineMax&quot; class=&quot;w-full py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded hover:bg-blue-100 text-xs font-bold transition-colors flex items-center justify-center gap-2&quot;&gt;
+             &lt;span&gt;📏&lt;/span&gt; 冬至影长线 (最长)
+           &lt;/button&gt;
+           &lt;button id=&quot;btnLineMin&quot; class=&quot;w-full py-1.5 bg-orange-50 text-orange-700 border border-orange-200 rounded hover:bg-orange-100 text-xs font-bold transition-colors flex items-center justify-center gap-2&quot;&gt;
+             &lt;span&gt;📏&lt;/span&gt; 夏至影长线 (最短)
+           &lt;/button&gt;
+           &lt;button id=&quot;btnLineMid&quot; class=&quot;w-full py-1.5 bg-purple-50 text-purple-700 border border-purple-200 rounded hover:bg-purple-100 text-xs font-bold transition-colors flex items-center justify-center gap-2&quot;&gt;
+             &lt;span&gt;📏&lt;/span&gt; 二分影长线 (中间)
+           &lt;/button&gt;
+           &lt;button id=&quot;btnGridLines&quot; class=&quot;w-full py-1.5 bg-gray-50 text-gray-700 border border-gray-200 rounded hover:bg-gray-100 text-xs font-bold transition-colors flex items-center justify-center gap-2&quot;&gt;
+             &lt;span&gt;▤&lt;/span&gt; 显示10条等分线
+           &lt;/button&gt;
+           &lt;button id=&quot;btnIntersections&quot; class=&quot;w-full py-1.5 bg-gray-50 text-gray-700 border border-gray-200 rounded hover:bg-gray-100 text-xs font-bold transition-colors flex items-center justify-center gap-2&quot;&gt;
+             &lt;span&gt;📍&lt;/span&gt; 显示20个交点
+           &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;border-t border-gray-200 pt-4 mt-auto&quot;&gt;
+        &lt;button id=&quot;discoverBtn&quot; class=&quot;w-full py-3 bg-accent text-white rounded-lg hover:bg-red-700 font-bold shadow-md transition-colors flex items-center justify-center gap-2&quot;&gt;
+          &lt;span&gt;🔍&lt;/span&gt; 发现规律
+        &lt;/button&gt;
+        
+        &lt;!-- 发现子菜单 --&gt;
+        &lt;div id=&quot;discoverMenu&quot; class=&quot;hidden mt-3 space-y-2 animate-fade-in&quot;&gt;
+          &lt;button id=&quot;btnHighPoint&quot; class=&quot;w-full py-2 bg-white border-2 border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50 font-bold text-sm transition-colors flex items-center justify-center gap-2&quot;&gt;
+            &lt;span&gt;❄️&lt;/span&gt; 标记最高点 (冬至)
+          &lt;/button&gt;
+          &lt;button id=&quot;btnLowPoint&quot; class=&quot;w-full py-2 bg-white border-2 border-orange-500 text-orange-600 rounded-lg hover:bg-orange-50 font-bold text-sm transition-colors flex items-center justify-center gap-2&quot;&gt;
+            &lt;span&gt;☀️&lt;/span&gt; 标记最低点 (夏至)
+          &lt;/button&gt;
+          &lt;button id=&quot;btnSpringPoint&quot; class=&quot;w-full py-2 bg-white border-2 border-emerald-500 text-emerald-600 rounded-lg hover:bg-emerald-50 font-bold text-sm transition-colors flex items-center justify-center gap-2&quot;&gt;
+            &lt;span&gt;🌱&lt;/span&gt; 标记春分点
+          &lt;/button&gt;
+          &lt;button id=&quot;btnAutumnPoint&quot; class=&quot;w-full py-2 bg-white border-2 border-amber-500 text-amber-600 rounded-lg hover:bg-amber-50 font-bold text-sm transition-colors flex items-center justify-center gap-2&quot;&gt;
+            &lt;span&gt;🍂&lt;/span&gt; 标记秋分点
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    // --- 核心算法 ---
+    function calculateDailyShadow(month, day) {
+      let dayOfYear = 0;
+      const daysInMonths = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      for(let i=1; i&lt;month; i++) dayOfYear += daysInMonths[i];
+      dayOfYear += day;
+      
+      const rad = (dayOfYear + 10) * (2 * Math.PI / 365);
+      const length = 175 + 145 * Math.cos(rad);
+      
+      return { length, dayOfYear };
+    }
+
+    // --- 初始化数据 ---
+    const daysInMonths = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const totalYears = 2; // 只保留2024, 2025
+    const daysPerYear = 365;
+    const totalDays = daysPerYear * totalYears;
+    
+    const labels = []; // 不再使用 labels，改用 linear 轴
+    const fullData = []; 
+    const displayData = new Array(totalDays).fill(null); 
+    
+    // 特殊点数据缓存 (只存储有效点)
+    const winterPoints = [];
+    const summerPoints = [];
+    const springPoints = [];
+    const autumnPoints = [];
+    
+    let dayCount = 0;
+    
+    // 生成2年数据 (2024, 2025)
+    for (let year = 1; year &lt;= totalYears; year++) {
+      const yearLabel = 2023 + year; // 2024, 2025
+      
+      for (let m = 1; m &lt;= 12; m++) {
+        for (let d = 1; d &lt;= daysInMonths[m]; d++) {
+          const res = calculateDailyShadow(m, d);
+          fullData.push(res.length);
+          
+          // 记录特殊点 (使用 {x, y} 格式)
+          if (m === 3 &amp;&amp; d === 21) springPoints.push({x: dayCount, y: res.length});
+          if (m === 6 &amp;&amp; d === 22) summerPoints.push({x: dayCount, y: res.length});
+          if (m === 9 &amp;&amp; d === 23) autumnPoints.push({x: dayCount, y: res.length});
+          if (m === 12 &amp;&amp; d === 22) winterPoints.push({x: dayCount, y: res.length});
+          
+          dayCount++;
+        }
+      }
+    }
+
+    // 计算极值用于辅助线
+    const maxLen = calculateDailyShadow(12, 22).length;
+    const minLen = calculateDailyShadow(6, 22).length;
+    const midLen = (maxLen + minLen) / 2;
+
+    let isFocusMode = false;
+
+    // --- 图表初始化 ---
+    // 显式注册插件，确保标签显示
+    if (typeof ChartDataLabels !== 'undefined') {
+      Chart.register(ChartDataLabels);
+    }
+
+    const ctx = document.getElementById('yearChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: '正午影长',
+            data: displayData,
+            borderColor: '#2D593E',
+            backgroundColor: 'rgba(45, 89, 62, 0.1)',
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            fill: true,
+            showLine: true,
+            spanGaps: false,
+            order: 5
+          },
+          {
+            label: '冬至',
+            data: [], // 初始为空
+            borderColor: '#3B82F6',
+            backgroundColor: '#3B82F6',
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            pointBorderWidth: 2,
+            pointBorderColor: '#fff',
+            showLine: false,
+            hidden: false,
+            order: 1,
+            clip: false,
+            datalabels: {
+              display: true,
+              align: 'top',
+              offset: 4,
+              color: '#3B82F6',
+              font: { weight: 'bold' },
+              formatter: () =&gt; '冬至12月22日前后'
+            }
+          },
+          {
+            label: '夏至',
+            data: [],
+            borderColor: '#F97316',
+            backgroundColor: '#F97316',
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            pointBorderWidth: 2,
+            pointBorderColor: '#fff',
+            showLine: false,
+            hidden: false,
+            order: 1,
+            datalabels: {
+              display: true,
+              align: 'bottom',
+              color: '#F97316',
+              font: { weight: 'bold' },
+              formatter: () =&gt; '夏至6月22日前后'
+            }
+          },
+          {
+            label: '春分',
+            data: [],
+            borderColor: '#10B981',
+            backgroundColor: '#10B981',
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            pointBorderWidth: 2,
+            pointBorderColor: '#fff',
+            showLine: false,
+            hidden: false,
+            order: 1,
+            datalabels: {
+              display: true,
+              align: 'right',
+              color: '#10B981',
+              font: { weight: 'bold' },
+              formatter: () =&gt; '春分3月21日前后'
+            }
+          },
+          {
+            label: '秋分',
+            data: [],
+            borderColor: '#F59E0B',
+            backgroundColor: '#F59E0B',
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            pointBorderWidth: 2,
+            pointBorderColor: '#fff',
+            showLine: false,
+            hidden: false,
+            order: 1,
+            datalabels: {
+              display: true,
+              align: 'right',
+              color: '#F59E0B',
+              font: { weight: 'bold' },
+              formatter: () =&gt; '秋分9月23日前后'
+            }
+          },
+          {
+            label: '交点',
+            data: [], // 动态计算
+            borderColor: '#DC2626',
+            backgroundColor: '#DC2626',
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            showLine: false,
+            hidden: false,
+            order: 0,
+            datalabels: { display: false }
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+           padding: { top: 20, right: 20, left: 10, bottom: 10 }
+        },
+        animation: {
+          duration: 1000,
+          easing: 'easeOutQuart'
+        },
+        onClick: (e, elements) =&gt; {
+          if (elements.length &gt; 0) {
+            const datasetIndex = elements[0].datasetIndex;
+            if (datasetIndex === 1) {
+              showModal('冬至 (Winter Solstice)', '冬至是一年中影长最长的一天，这一天也是一年中白昼最短的一天。');
+            } else if (datasetIndex === 2) {
+              showModal('夏至 (Summer Solstice)', '夏至是一年中影长最短的一天，这一天也是一年中白昼最长的一天。');
+            } else if (datasetIndex === 3) {
+              showModal('春分 (Vernal Equinox)', '春分时，阳光直射赤道，全球昼夜平分。此后北半球白昼渐长。');
+            } else if (datasetIndex === 4) {
+              showModal('秋分 (Autumnal Equinox)', '秋分时，阳光直射赤道，全球昼夜平分。此后北半球白昼渐短。');
+            }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            filter: function(tooltipItem) {
+              return tooltipItem.datasetIndex === 0;
+            },
+            callbacks: {
+              title: function(context) {
+                const index = context[0].dataIndex;
+                const year = Math.floor(index / 365) + 2023;
+                let dayOfYear = index % 365;
+                
+                let m = 1;
+                while (dayOfYear &gt;= daysInMonths[m]) {
+                  dayOfYear -= daysInMonths[m];
+                  m++;
+                }
+                return `${year}年${m}月${dayOfYear + 1}日`;
+              },
+              label: function(context) {
+                return `影长: ${context.parsed.y.toFixed(1)} cm`;
+              }
+            }
+          },
+          datalabels: { display: false },
+          annotation: {
+            annotations: {
+              line1: {
+                type: 'line',
+                xMin: 365,
+                xMax: 365,
+                borderColor: 'rgba(0, 0, 0, 0.2)',
+                borderWidth: 2,
+                borderDash: [6, 6],
+                label: {
+                  display: true,
+                  content: '2024年结束',
+                  position: 'start',
+                  backgroundColor: 'rgba(0,0,0,0.4)',
+                  font: { size: 10 }
+                }
+              },
+              lineMax: {
+                type: 'line',
+                yMin: maxLen,
+                yMax: maxLen,
+                borderColor: 'rgba(59, 130, 246, 0.5)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                display: false,
+                label: {
+                  display: true,
+                  content: '冬至影长',
+                  position: 'start',
+                  backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                  font: { size: 10 }
+                }
+              },
+              lineMin: {
+                type: 'line',
+                yMin: minLen,
+                yMax: minLen,
+                borderColor: 'rgba(249, 115, 22, 0.5)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                display: false,
+                label: {
+                  display: true,
+                  content: '夏至影长',
+                  position: 'start',
+                  backgroundColor: 'rgba(249, 115, 22, 0.7)',
+                  font: { size: 10 }
+                }
+              },
+              lineMid: {
+                type: 'line',
+                yMin: midLen,
+                yMax: midLen,
+                borderColor: 'rgba(168, 85, 247, 0.5)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                display: false,
+                label: {
+                  display: true,
+                  content: '二分影长',
+                  position: 'start',
+                  backgroundColor: 'rgba(168, 85, 247, 0.7)',
+                  font: { size: 10 }
+                }
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'linear',
+            min: 0,
+            max: totalDays,
+            grid: { display: false },
+            ticks: { 
+              stepSize: 1,
+              maxRotation: 0, 
+              autoSkip: false, 
+              callback: function(val, index) {
+                const yearIndex = Math.floor(val / 365);
+                const currentYear = 2024 + yearIndex;
+                const dayOfYear = val % 365;
+                
+                let m = 1;
+                let dCount = 0;
+                while (m &lt;= 12 &amp;&amp; dayOfYear &gt;= dCount + daysInMonths[m]) {
+                  dCount += daysInMonths[m];
+                  m++;
+                }
+                const day = dayOfYear - dCount + 1;
+                
+                if (day !== 1) return '';
+                
+                const label = `${currentYear}年${m}月`;
+                
+                if (isFocusMode) {
+                   if (m === 1) return label;
+                   return `${m}月`;
+                }
+                
+                if (m === 1 || m === 7) return label;
+                return '';
+              }
+            }
+          },
+          y: {
+            min: 0, max: 350,
+            title: { display: true, text: '影长 (cm)' }
+          }
+        }
+      }
+    });
+
+    // --- 交互逻辑 ---
+    const btnContainer = document.getElementById('monthGrid');
+    const monthStatus = new Array(13).fill(false);
+
+    for (let m = 1; m &lt;= 12; m++) {
+      const btn = document.createElement('button');
+      btn.className = 'btn-month bg-white border border-gray-300 text-gray-600 py-2 rounded-lg font-bold text-sm hover:border-primary hover:text-primary';
+      btn.innerText = `${m}月`;
+      btn.onclick = () =&gt; toggleMonth(m, btn);
+      btnContainer.appendChild(btn);
+    }
+
+    function toggleMonth(month, btn) {
+      const isActive = !monthStatus[month];
+      monthStatus[month] = isActive;
+      
+      if (isActive) {
+        btn.classList.add('active');
+        btn.classList.remove('border-gray-300', 'text-gray-600');
+      } else {
+        btn.classList.remove('active');
+        btn.classList.add('border-gray-300', 'text-gray-600');
+      }
+      updateChartData();
+    }
+
+    function updateChartData() {
+      let dataIndex = 0;
+      for (let year = 1; year &lt;= totalYears; year++) {
+        for (let m = 1; m &lt;= 12; m++) {
+          const days = daysInMonths[m];
+          for (let d = 1; d &lt;= days; d++) {
+            const val = monthStatus[m] ? fullData[dataIndex] : null;
+            displayData[dataIndex] = { x: dataIndex, y: val };
+            dataIndex++;
+          }
+        }
+      }
+      chart.update();
+    }
+
+    // 发现功能
+    const discoverBtn = document.getElementById('discoverBtn');
+    const discoverMenu = document.getElementById('discoverMenu');
+    const btnHighPoint = document.getElementById('btnHighPoint');
+    const btnLowPoint = document.getElementById('btnLowPoint');
+    const btnSpringPoint = document.getElementById('btnSpringPoint');
+    const btnAutumnPoint = document.getElementById('btnAutumnPoint');
+
+    discoverBtn.onclick = () =&gt; {
+      discoverMenu.classList.toggle('hidden');
+    };
+
+    btnHighPoint.onclick = () =&gt; {
+      chart.data.datasets[1].data = winterPoints;
+      chart.update();
+      if (!monthStatus[12]) toggleMonth(12, btnContainer.children[11]);
+    };
+
+    btnLowPoint.onclick = () =&gt; {
+      chart.data.datasets[2].data = summerPoints;
+      chart.update();
+      if (!monthStatus[6]) toggleMonth(6, btnContainer.children[5]);
+    };
+
+    btnSpringPoint.onclick = () =&gt; {
+      chart.data.datasets[3].data = springPoints;
+      chart.update();
+      if (!monthStatus[3]) toggleMonth(3, btnContainer.children[2]);
+    };
+
+    btnAutumnPoint.onclick = () =&gt; {
+      chart.data.datasets[4].data = autumnPoints;
+      chart.update();
+      if (!monthStatus[9]) toggleMonth(9, btnContainer.children[8]);
+    };
+
+    // 弹窗控制
+    const infoModal = document.getElementById('infoModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+
+    function showModal(title, desc) {
+      modalTitle.innerText = title;
+      modalDesc.innerText = desc;
+      infoModal.classList.remove('hidden');
+    }
+
+    // 全局控制
+    document.getElementById('resetBtn').onclick = () =&gt; {
+      monthStatus.fill(false);
+      document.querySelectorAll('.btn-month').forEach(btn =&gt; {
+        btn.classList.remove('active');
+        btn.classList.add('border-gray-300', 'text-gray-600');
+      });
+      for(let i=1; i&lt;=4; i++) chart.data.datasets[i].data = [];
+      chart.data.datasets[5].data = [];
+      updateChartData();
+    };
+
+    document.getElementById('showAllBtn').onclick = () =&gt; {
+      isFocusMode = false;
+      monthStatus.fill(true);
+      document.querySelectorAll('.btn-month').forEach(btn =&gt; {
+        btn.classList.add('active');
+        btn.classList.remove('border-gray-300', 'text-gray-600');
+      });
+      chart.options.scales.x.min = 0;
+      chart.options.scales.x.max = totalDays;
+      chart.update();
+      updateChartData();
+    };
+    
+    document.getElementById('focusBtn').onclick = () =&gt; {
+      isFocusMode = true;
+      chart.options.scales.x.min = 365;
+      chart.options.scales.x.max = 730;
+      chart.update();
+    };
+    
+    // 辅助线控制
+    function toggleLine(id) {
+       const display = chart.options.plugins.annotation.annotations[id].display;
+       chart.options.plugins.annotation.annotations[id].display = !display;
+       chart.update();
+    }
+    
+    const gridLines = {};
+    const step1 = (maxLen - midLen) / 6;
+    const step2 = (midLen - minLen) / 6;
+    const targetYValues = [];
+    
+    for(let i=1; i&lt;=5; i++) {
+      const y1 = midLen + step1 * i;
+      const y2 = midLen - step2 * i;
+      targetYValues.push(y1, y2);
+      
+        gridLines[`grid_upper_${i}`] = {
+        type: 'line',
+        yMin: y1, yMax: y1,
+        borderColor: 'rgba(147, 51, 234, 0.5)',
+        borderWidth: 2,
+        borderDash: [4, 4],
+        display: false
+      };
+      gridLines[`grid_lower_${i}`] = {
+        type: 'line',
+        yMin: y2, yMax: y2,
+        borderColor: 'rgba(147, 51, 234, 0.5)',
+        borderWidth: 2,
+        borderDash: [4, 4],
+        display: false
+      };
+    }
+    Object.assign(chart.options.plugins.annotation.annotations, gridLines);
+    
+    document.getElementById('btnLineMax').onclick = () =&gt; toggleLine('lineMax');
+    document.getElementById('btnLineMin').onclick = () =&gt; toggleLine('lineMin');
+    document.getElementById('btnLineMid').onclick = () =&gt; toggleLine('lineMid');
+    
+    document.getElementById('btnGridLines').onclick = () =&gt; {
+      const isHidden = !chart.options.plugins.annotation.annotations['grid_upper_1'].display;
+      
+      for(let i=1; i&lt;=5; i++) {
+        chart.options.plugins.annotation.annotations[`grid_upper_${i}`].display = isHidden;
+        chart.options.plugins.annotation.annotations[`grid_lower_${i}`].display = isHidden;
+      }
+      
+      chart.options.scales.y.grid.display = !isHidden;
+      chart.update();
+    };
+    
+    document.getElementById('btnIntersections').onclick = () =&gt; {
+      const dataset = chart.data.datasets.find(d =&gt; d.label === '交点');
+      if (!dataset) return;
+      
+      if (dataset.data.length &gt; 0) {
+        dataset.data = [];
+        chart.update();
+        return;
+      }
+      
+      if (!targetYValues || targetYValues.length === 0) {
+         const s1 = (maxLen - midLen) / 6;
+         const s2 = (midLen - minLen) / 6;
+         for(let i=1; i&lt;=5; i++) {
+           targetYValues.push(midLen + s1 * i, midLen - s2 * i);
+         }
+      }
+      
+      const points = [];
+      for (let i = 0; i &lt; fullData.length - 1; i++) {
+        const y1 = fullData[i];
+        const y2 = fullData[i+1];
+        
+        targetYValues.forEach(targetY =&gt; {
+          if ((y1 &lt;= targetY &amp;&amp; y2 &gt;= targetY) || (y1 &gt;= targetY &amp;&amp; y2 &lt;= targetY)) {
+            const fraction = (targetY - y1) / (y2 - y1);
+            if (fraction &gt;= 0 &amp;&amp; fraction &lt;= 1) {
+               points.push({ x: i + fraction, y: targetY });
+            }
+          }
+        });
+      }
+      dataset.data = points;
+      chart.update();
+    };
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;" frameborder="0">
+    </iframe>
+  </div>
+</body>
+</html>

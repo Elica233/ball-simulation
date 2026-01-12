@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generation-source" content="AI生成">
+  <title>小陈老师的AI工具</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .iframe-container {
+      box-sizing: border-box;
+      padding: 20px;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .iframe-container.mobile {
+      padding: 0.48rem 0 0 0;
+
+      .content-iframe {
+        border: transparent;
+        border-radius: 0;
+      }
+    }
+
+    .content-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      border: 0.5px solid #C9DACC;
+      border-radius: 16px;
+    }
+
+    .ai-badge {
+      position: fixed;
+      right: 37px;
+      bottom: 37px;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 24px;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  </style>
+  <!-- 后端传值 -->
+<script>
+    window.__SERVER_DATA__ = {
+      watermarkChatId: "915859AC96CE9057C4E8327B1C2BD9A7",
+      watermarkEnv: "online",
+      watermarkUrl: "https://musk-online.fbcontent.cn/pub-musk-ai-studio/workflow/file/document/XoWNRmJ252rNBUgoQKS2wd.html"
+    }
+</script>
+
+  <!-- 引入 Frog 埋点 SDK（本地构建版本） -->
+  <script src="https://www.feixianglaoshi.com/frog-sdk.js"></script>
+
+  <!--  埋点初始化 -->
+  <script src='https://www.feixianglaoshi.com/init-frog.js'></script>
+</head>
+
+<body>
+
+  <!-- 主要内容容器 -->
+  <div class="iframe-container">
+    <iframe class="content-iframe" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;小陈老师的AI工具 - 日影观测数据记录工具&lt;/title&gt;
+  &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chart.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/date-fns&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2D593E',
+            secondary: '#EBEDD4',
+            accent: '#DC2626',
+            surface: '#FDFBF7'
+          },
+          boxShadow: {
+            'custom': '0 4px 20px rgba(45, 89, 62, 0.1)'
+          }
+        }
+      }
+    }
+  &lt;/script&gt;
+  &lt;style&gt;
+    body {
+      background-color: #EBEDD4;
+      font-family: &quot;Microsoft YaHei&quot;, sans-serif;
+    }
+    /* 圭表纹理 - 使用CSS渐变模拟 */
+    .stone-texture {
+      background-color: #e0e0d0;
+      background-image: radial-gradient(#b0b0a0 1px, transparent 1px);
+      background-size: 4px 4px;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class=&quot;h-screen overflow-hidden flex flex-col p-4 gap-4&quot;&gt;
+  
+  &lt;!-- 头部 --&gt;
+  &lt;header class=&quot;flex-shrink-0 flex justify-between items-center bg-surface px-6 py-3 rounded-xl shadow-sm border border-[#d0d4c0]&quot;&gt;
+    &lt;h1 class=&quot;text-xl font-bold text-primary flex items-center gap-2&quot;&gt;
+      &lt;span&gt;📐&lt;/span&gt; 小陈老师的AI工具 - 日影观测数据记录
+    &lt;/h1&gt;
+    &lt;div class=&quot;text-sm text-gray-500&quot;&gt;输入日期 &rarr; 观测模拟 &rarr; 记录数据&lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;!-- 主体内容 --&gt;
+  &lt;div class=&quot;flex-1 flex gap-4 min-h-0&quot;&gt;
+    
+    &lt;!-- 左侧：操作与演示区 --&gt;
+    &lt;div class=&quot;w-1/3 flex flex-col gap-4&quot;&gt;
+      
+      &lt;!-- 输入面板 --&gt;
+      &lt;div class=&quot;bg-surface p-5 rounded-2xl shadow-custom border border-[#d0d4c0]&quot;&gt;
+        &lt;h3 class=&quot;text-sm font-bold text-primary mb-3 uppercase tracking-wider&quot;&gt;观测日期设置&lt;/h3&gt;
+        
+        &lt;!-- 年月选择 --&gt;
+        &lt;div class=&quot;flex flex-col gap-3 mb-4&quot;&gt;
+          &lt;!-- 年份按钮组 --&gt;
+          &lt;div class=&quot;flex gap-2&quot;&gt;
+            &lt;button onclick=&quot;setYear(2024)&quot; id=&quot;btn2024&quot; class=&quot;flex-1 py-2 border border-gray-300 rounded-lg font-bold text-sm hover:bg-gray-50 transition-colors text-gray-600&quot;&gt;2024年&lt;/button&gt;
+            &lt;button onclick=&quot;setYear(2025)&quot; id=&quot;btn2025&quot; class=&quot;flex-1 py-2 border border-gray-300 rounded-lg font-bold text-sm hover:bg-gray-50 transition-colors text-gray-600&quot;&gt;2025年&lt;/button&gt;
+          &lt;/div&gt;
+          
+          &lt;!-- 月份输入 --&gt;
+          &lt;div class=&quot;relative&quot;&gt;
+            &lt;input type=&quot;number&quot; id=&quot;monthInput&quot; placeholder=&quot;输入月份 (1-12)&quot; min=&quot;1&quot; max=&quot;12&quot; 
+                   class=&quot;w-full p-2 border border-gray-300 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none text-center font-mono font-bold text-primary&quot;
+                   oninput=&quot;handleMonthInput(this.value)&quot;&gt;
+            &lt;span class=&quot;absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm&quot;&gt;月&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- 日期按钮区域 --&gt;
+        &lt;div id=&quot;dateButtonsContainer&quot; class=&quot;hidden bg-gray-50 p-3 rounded-xl border border-gray-200 max-h-[300px] overflow-y-auto&quot;&gt;
+          &lt;div class=&quot;flex flex-col mb-2&quot;&gt;
+            &lt;div class=&quot;flex justify-between items-center&quot;&gt;
+              &lt;span class=&quot;text-xs font-bold text-gray-500&quot;&gt;点击日期记录数据&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;span class=&quot;text-[10px] text-orange-600 mt-1&quot;&gt;💡 建议从1日开始依次点击，以获得最佳连线效果&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;div id=&quot;dateGrid&quot; class=&quot;grid grid-cols-5 gap-2&quot;&gt;
+            &lt;!-- 按钮由JS生成 --&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 演示视窗 --&gt;
+      &lt;div class=&quot;flex-1 bg-surface rounded-2xl shadow-custom border border-[#d0d4c0] relative overflow-hidden flex flex-col&quot;&gt;
+        &lt;div class=&quot;absolute top-4 left-4 z-10&quot;&gt;
+          &lt;div class=&quot;text-xs text-gray-500&quot;&gt;当前观测结果&lt;/div&gt;
+          &lt;div class=&quot;text-3xl font-bold text-accent font-mono&quot; id=&quot;resultDisplay&quot;&gt;-- cm&lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- 圭表场景 --&gt;
+        &lt;div class=&quot;flex-1 relative bg-gradient-to-b from-sky-100 to-sky-50 mt-16 mx-4 mb-4 rounded-xl border border-gray-200 overflow-hidden shadow-inner&quot;&gt;
+          &lt;!-- 太阳 --&gt;
+          &lt;div id=&quot;sun&quot; class=&quot;absolute w-12 h-12 bg-yellow-400 rounded-full shadow-[0_0_40px_rgba(250,204,21,0.8)] top-4 left-4 z-20 flex items-center justify-center&quot;&gt;
+            &lt;div class=&quot;w-full h-full bg-yellow-300 rounded-full animate-pulse opacity-50&quot;&gt;&lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;!-- 光线辅助线 (虚线) --&gt;
+          &lt;div id=&quot;lightRay&quot; class=&quot;absolute top-0 left-0 h-0.5 bg-yellow-500/30 origin-left z-10 pointer-events-none border-t border-dashed border-yellow-600/50&quot;&gt;&lt;/div&gt;
+
+          &lt;!-- 地面 --&gt;
+          &lt;div class=&quot;absolute bottom-0 w-full h-12 bg-[#d1d5db] border-t border-gray-300&quot;&gt;&lt;/div&gt;
+          
+          &lt;!-- 圭表装置 --&gt;
+          &lt;div class=&quot;absolute bottom-12 left-8 right-8 h-32&quot;&gt;
+            &lt;!-- 圭 (水平尺) - 带刻度 --&gt;
+            &lt;div class=&quot;absolute bottom-0 left-4 w-full h-6 bg-[#e5e5d5] rounded-r-sm border border-[#b0b0a0] shadow-md origin-left flex items-end overflow-hidden&quot;&gt;
+               &lt;!-- 刻度线 --&gt;
+               &lt;div class=&quot;w-full h-full opacity-40&quot; style=&quot;background-image: repeating-linear-gradient(90deg, #555 0, #555 1px, transparent 1px, transparent 10px);&quot;&gt;&lt;/div&gt;
+               &lt;div class=&quot;absolute top-0 w-full h-2 opacity-60&quot; style=&quot;background-image: repeating-linear-gradient(90deg, #333 0, #333 1px, transparent 1px, transparent 50px);&quot;&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;!-- 表 (垂直杆) - 立体感 --&gt;
+            &lt;div class=&quot;absolute bottom-0 left-4 w-3 h-24 bg-gradient-to-r from-[#5c4d3c] via-[#8b735b] to-[#4a3b2a] rounded-t-sm shadow-lg z-20 border border-[#3e3221]&quot;&gt;
+              &lt;!-- 高光 --&gt;
+              &lt;div class=&quot;absolute top-0 left-1 w-0.5 h-full bg-white/10&quot;&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;!-- 影子 - 真实渐变与模糊 --&gt;
+            &lt;div id=&quot;shadow&quot; class=&quot;absolute bottom-6 left-[1.3rem] h-0 origin-left z-10 flex items-center&quot;&gt;
+               &lt;!-- 影子本体 --&gt;
+               &lt;div class=&quot;h-4 bg-gradient-to-r from-black/70 to-black/20 w-full blur-[1px] transform skew-x-12 origin-bottom-left rounded-r-full&quot;&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;!-- 影子末端标记 --&gt;
+            &lt;div id=&quot;shadowTip&quot; class=&quot;absolute bottom-8 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[8px] border-t-red-600 -translate-x-1/2 opacity-0 transition-opacity duration-300 drop-shadow-md z-30&quot; style=&quot;left: 0;&quot;&gt;
+              &lt;div id=&quot;shadowTipText&quot; class=&quot;absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold text-red-600 bg-white/90 px-2 py-0.5 rounded shadow-sm whitespace-nowrap border border-red-100&quot;&gt;-- cm&lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- 记录按钮 --&gt;
+        &lt;div class=&quot;p-4 pt-0 flex gap-2&quot;&gt;
+          &lt;button id=&quot;recordBtn&quot; disabled class=&quot;flex-1 py-3 bg-gray-300 text-white rounded-lg font-bold transition-all flex items-center justify-center gap-2 cursor-not-allowed&quot;&gt;
+            &lt;span&gt;📝&lt;/span&gt; 记录此数据
+          &lt;/button&gt;
+          &lt;button id=&quot;deleteBtn&quot; onclick=&quot;deleteCurrentRecord()&quot; class=&quot;hidden w-1/3 py-3 bg-red-100 text-red-600 border border-red-200 rounded-lg font-bold hover:bg-red-200 transition-all flex items-center justify-center gap-1&quot;&gt;
+            &lt;span&gt;🗑️&lt;/span&gt; 删除
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 右侧：数据记录区 (左右排列) --&gt;
+    &lt;div class=&quot;w-2/3 flex flex-row gap-4 min-h-0&quot;&gt;
+      
+      &lt;!-- 2024年图表 --&gt;
+      &lt;div class=&quot;flex-1 h-full bg-surface p-3 rounded-xl shadow-custom border border-[#d0d4c0] flex flex-col min-w-0&quot;&gt;
+        &lt;div class=&quot;flex-1 relative min-h-0&quot;&gt;
+          &lt;canvas id=&quot;chart2024&quot;&gt;&lt;/canvas&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- 2025年图表 --&gt;
+      &lt;div class=&quot;flex-1 h-full bg-surface p-3 rounded-xl shadow-custom border border-[#d0d4c0] flex flex-col min-w-0&quot;&gt;
+        &lt;div class=&quot;flex-1 relative min-h-0&quot;&gt;
+          &lt;canvas id=&quot;chart2025&quot;&gt;&lt;/canvas&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    // --- 状态管理 ---
+    let currentData = null; // 当前模拟的数据 {date, length}
+    let records = []; // 历史记录
+    let charts = {}; // 存储三个图表实例 {2023: chart, 2024: chart, 2025: chart}
+    let viewingRecordIndex = -1; // 当前正在回看的记录索引
+
+    // --- 核心算法 ---
+    function isLeapYear(year) {
+      return (year % 4 === 0 &amp;&amp; year % 100 !== 0) || (year % 400 === 0);
+    }
+
+    function getDayOfYear(year, month, day) {
+      const daysInMonths = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      if (isLeapYear(year)) daysInMonths[2] = 29;
+      
+      let dayOfYear = 0;
+      for(let i=1; i&lt;month; i++) dayOfYear += daysInMonths[i];
+      dayOfYear += day;
+      return dayOfYear;
+    }
+
+    function calculateShadow(year, month, day) {
+      // 为了保证两年数据一致（教学演示需求），统一按平年模型计算
+      // 3月1日及以后的日期，无论闰年与否，都视为同一个相位
+      
+      const daysInMonths = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      let dayOfYear = 0;
+      
+      // 特殊处理闰年2月29日
+      if (month === 2 &amp;&amp; day === 29) {
+        // 将2月29日视为第 59.5 天 (介于2.28和3.1之间)
+        dayOfYear = 31 + 28.5;
+      } else {
+        for(let i=1; i&lt;month; i++) dayOfYear += daysInMonths[i];
+        dayOfYear += day;
+      }
+
+      // 统一使用平年参数
+      const totalDays = 365;
+      // 冬至偏移量 (12.22 约为第 356 天)
+      const offset = 356;
+      
+      const rad = (dayOfYear - offset) * (2 * Math.PI / totalDays);
+      
+      // 长度范围 30 - 320
+      const length = 175 + 145 * Math.cos(rad);
+      
+      // 计算太阳高度角 (用于UI显示)
+      const angleRad = Math.atan(100 / length);
+      const angleDeg = angleRad * (180 / Math.PI);
+      
+      return { length, angleDeg };
+    }
+
+    // --- UI 更新 ---
+    const recordBtn = document.getElementById('recordBtn');
+    const resultDisplay = document.getElementById('resultDisplay');
+    const shadowEl = document.getElementById('shadow');
+    const shadowTip = document.getElementById('shadowTip');
+    const shadowTipText = document.getElementById('shadowTipText');
+    const sunEl = document.getElementById('sun');
+    const lightRay = document.getElementById('lightRay');
+    const dateButtonsContainer = document.getElementById('dateButtonsContainer');
+    const dateGrid = document.getElementById('dateGrid');
+    
+    // 当前年份
+    let currentYear = 2024;
+    
+    // 设置年份
+    window.setYear = function(year) {
+      currentYear = year;
+      // 更新按钮样式
+      ['2024', '2025'].forEach(y =&gt; {
+        const btn = document.getElementById(`btn${y}`);
+        if (parseInt(y) === year) {
+          btn.classList.add('bg-primary', 'text-white', 'border-primary');
+          btn.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-50');
+        } else {
+          btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+          btn.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-50');
+        }
+      });
+      
+      // 刷新日期按钮状态
+      updateDateButtonsState();
+      
+      // 如果已经输入了月份，重新触发计算
+      const monthVal = document.getElementById('monthInput').value;
+      if (monthVal) {
+         // 默认选中1日或保持当前日
+         // simulateDay(parseInt(monthVal), 1);
+      }
+    };
+
+    // 处理月份输入
+    window.handleMonthInput = function(val) {
+      const month = parseInt(val);
+      
+      if (!month || month &lt; 1 || month &gt; 12) {
+        dateButtonsContainer.classList.add('hidden');
+        return;
+      }
+
+      // 获取该月天数
+      const daysInMonth = new Date(currentYear, month, 0).getDate();
+      
+      // 生成日期按钮
+      generateDateButtons(daysInMonth, month);
+      dateButtonsContainer.classList.remove('hidden');
+      
+      // 默认模拟1日
+      simulateDay(month, 1);
+    };
+    
+    // 生成日期按钮
+    function generateDateButtons(days, month) {
+      dateGrid.innerHTML = '';
+      for (let d = 1; d &lt;= days; d++) {
+        const btn = document.createElement('button');
+        btn.className = 'p-2 text-xs font-bold border rounded hover:bg-gray-100 transition-colors';
+        btn.innerText = `${d}日`;
+        btn.dataset.day = d;
+        btn.onclick = () =&gt; {
+          simulateDay(month, d);
+          autoRecord();
+          updateDateButtonsState();
+        };
+        dateGrid.appendChild(btn);
+      }
+      updateDateButtonsState();
+    }
+    
+    // 更新日期按钮状态 (已记录的变色)
+    function updateDateButtonsState() {
+      const month = parseInt(document.getElementById('monthInput').value);
+      if (!month) return;
+      
+      const buttons = dateGrid.querySelectorAll('button');
+      buttons.forEach(btn =&gt; {
+        const day = parseInt(btn.dataset.day);
+        // 检查是否有记录
+        const hasRecord = records.some(r =&gt; 
+          r.year === currentYear &amp;&amp; 
+          r.month === month &amp;&amp; 
+          r.day === day
+        );
+        
+        if (hasRecord) {
+          btn.classList.add('bg-green-100', 'text-green-700', 'border-green-300');
+          btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+        } else {
+          btn.classList.remove('bg-green-100', 'text-green-700', 'border-green-300');
+          btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+        }
+        
+        // 高亮当前选中的
+        if (currentData &amp;&amp; currentData.year === currentYear &amp;&amp; currentData.month === month &amp;&amp; currentData.day === day) {
+           btn.classList.add('ring-2', 'ring-primary', 'ring-offset-1');
+        } else {
+           btn.classList.remove('ring-2', 'ring-primary', 'ring-offset-1');
+        }
+      });
+    }
+    
+    // 自动记录当前数据
+    function autoRecord() {
+      if (!currentData) return;
+      
+      // 退出回看模式
+      viewingRecordIndex = -1;
+      document.getElementById('deleteBtn').classList.add('hidden');
+      document.getElementById('recordBtn').classList.remove('hidden');
+      
+      // 检查是否已存在该日期的记录
+      const existingIndex = records.findIndex(r =&gt; 
+        r.year === currentData.year &amp;&amp; 
+        r.month === currentData.month &amp;&amp; 
+        r.day === currentData.day
+      );
+      
+      if (existingIndex !== -1) {
+        // 更新已有记录
+        records[existingIndex].length = currentData.length;
+      } else {
+        // 添加新记录
+        records.push(JSON.parse(JSON.stringify(currentData)));
+      }
+      
+      // 更新UI
+      updateCharts();
+    }
+
+    // 模拟指定日期
+    function simulateDay(month, day) {
+      // 退出回看模式
+      viewingRecordIndex = -1;
+      document.getElementById('deleteBtn').classList.add('hidden');
+      document.getElementById('recordBtn').classList.remove('hidden');
+      
+      // 更新滑杆显示 (已移除)
+      // currentDateDisplay.innerText = `${day}日`;
+      
+      const res = calculateShadow(currentYear, month, day);
+      currentData = { 
+        year: currentYear, 
+        month, 
+        day, 
+        length: res.length,
+        dateObj: new Date(currentYear, month - 1, day)
+      };
+
+      // 渲染场景
+      renderScene(res.length, res.angleDeg);
+      
+      // 更新散点图预览点
+      updatePreviewPoint(currentData);
+
+      // 激活记录按钮 (自动记录模式下，按钮仅作为状态提示)
+      recordBtn.disabled = true;
+      recordBtn.innerHTML = '&lt;span&gt;⚡&lt;/span&gt; 自动记录中...';
+      recordBtn.classList.remove('bg-gray-300', 'cursor-not-allowed', 'bg-accent', 'hover:bg-red-700', 'shadow-lg');
+      recordBtn.classList.add('bg-blue-500', 'text-white', 'cursor-default');
+    }
+
+    // 渲染场景核心逻辑
+    function renderScene(length, angleDeg) {
+      // 更新显示数值
+      resultDisplay.innerText = `${length.toFixed(1)} cm`;
+
+      // 动画更新
+      // 1. 太阳位置
+      const sunBottom = 20 + (angleDeg / 90) * 60;
+      anime({
+        targets: sunEl,
+        bottom: `${sunBottom}%`,
+        duration: 800,
+        easing: 'easeOutQuad',
+        update: function() {
+           updateLightRay();
+        }
+      });
+
+      // 2. 影子长度
+      const maxLen = 350;
+      const widthPercent = (length / maxLen) * 100;
+      
+      shadowEl.style.width = `${Math.min(widthPercent, 100)}%`;
+      
+      // 3. 标记点位置
+      shadowTip.style.left = `calc(1.3rem + ${Math.min(widthPercent, 100)}%)`;
+      shadowTip.style.opacity = 1;
+      
+      // 更新标记点数值
+      shadowTipText.innerText = `${length.toFixed(1)} cm`;
+      
+      // 立即更新一次光线
+      setTimeout(updateLightRay, 50);
+    }
+
+    // 回看历史记录
+    window.restoreView = function(index) {
+      const item = records[index];
+      if (!item) return;
+      
+      viewingRecordIndex = index;
+      
+      // 切换到对应年份
+      setYear(item.year);
+      // 填入月份
+      document.getElementById('monthInput').value = item.month;
+      // 重新生成按钮
+      handleMonthInput(item.month);
+      
+      // 模拟该日 (不自动记录)
+      // simulateDay 会重置 viewingRecordIndex，所以要手动处理
+      
+      const res = calculateShadow(item.year, item.month, item.day);
+      currentData = item;
+      renderScene(item.length, res.angleDeg);
+      updatePreviewPoint(item);
+      
+      // 更新按钮状态
+      updateDateButtonsState();
+      
+      // 更新按钮状态：显示删除按钮
+      const recordBtn = document.getElementById('recordBtn');
+      const deleteBtn = document.getElementById('deleteBtn');
+      
+      recordBtn.classList.add('hidden');
+      deleteBtn.classList.remove('hidden');
+    };
+    
+    // 删除当前回看的记录
+    window.deleteCurrentRecord = function() {
+      if (viewingRecordIndex === -1) return;
+      
+      records.splice(viewingRecordIndex, 1);
+      viewingRecordIndex = -1;
+      
+      // 恢复到自动记录状态
+      document.getElementById('deleteBtn').classList.add('hidden');
+      document.getElementById('recordBtn').classList.remove('hidden');
+      
+      // 更新图表和按钮状态
+      updateCharts();
+      updateDateButtonsState();
+      
+      // 提示
+      resultDisplay.innerText = '-- cm';
+      shadowEl.style.width = '0%';
+      shadowTip.style.opacity = 0;
+    };
+    
+    // 更新光线辅助线
+    function updateLightRay() {
+       const sunRect = sunEl.getBoundingClientRect();
+       const tipRect = shadowTip.getBoundingClientRect();
+       const containerRect = sunEl.parentElement.getBoundingClientRect();
+       
+       // 相对容器的坐标
+       const x1 = sunRect.left + sunRect.width/2 - containerRect.left;
+       const y1 = sunRect.top + sunRect.height/2 - containerRect.top;
+       const x2 = tipRect.left + tipRect.width/2 - containerRect.left;
+       const y2 = tipRect.top + tipRect.height - containerRect.top; // 指向箭头底部
+       
+       const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+       const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+       
+       lightRay.style.width = `${length}px`;
+       lightRay.style.left = `${x1}px`;
+       lightRay.style.top = `${y1}px`;
+       lightRay.style.transform = `rotate(${angle}deg)`;
+    }
+
+    window.deleteRecord = function(index) {
+      records.splice(index, 1);
+      updateCharts();
+    };
+
+    // 注册插件
+    Chart.register(ChartDataLabels);
+
+    // --- 图表初始化 ---
+    function createChartConfig(year, color) {
+      return {
+        type: 'line',
+        data: {
+          labels: Array.from({length: 31}, (_, i) =&gt; `${i + 1}日`),
+          datasets: [
+            {
+              label: `${year}年记录`,
+              data: [],
+              backgroundColor: color,
+              borderColor: color,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              showLine: false,
+              order: 2,
+              datalabels: {
+                display: true,
+                align: 'top',
+                anchor: 'end',
+                offset: 4,
+                color: color,
+                font: { size: 10, weight: 'bold' },
+                formatter: (value) =&gt; value.y.toFixed(1)
+              }
+            },
+            {
+              label: '当前预览',
+              data: [],
+              backgroundColor: '#F59E0B',
+              borderColor: '#F59E0B',
+              pointRadius: 6,
+              pointHoverRadius: 8,
+              pointStyle: 'rectRot',
+              showLine: false,
+              order: 1,
+              datalabels: {
+                display: true,
+                align: 'bottom',
+                anchor: 'start',
+                offset: 4,
+                color: '#F59E0B',
+                font: { size: 11, weight: 'bold' },
+                formatter: (value) =&gt; value.y.toFixed(1)
+              }
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          onClick: (e, elements) =&gt; {
+            if (elements.length &gt; 0) {
+              const element = elements[0];
+              const datasetIndex = element.datasetIndex;
+              const index = element.index;
+              // 只处理记录数据的点击
+              if (datasetIndex === 0) {
+                const chart = e.chart;
+                const recordIndex = chart.data.datasets[0].data[index]._recordIndex;
+                if (recordIndex !== undefined) {
+                  restoreView(recordIndex);
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'category',
+              title: { display: false }, // 节省空间
+              grid: { drawOnChartArea: true },
+              ticks: { font: { size: 10 } }
+            },
+            y: {
+              beginAtZero: false,
+              // 移除固定量程，改为自适应，使变化更清晰
+              // min: 0,
+              // max: 350,
+              grace: '10%', // 上下留出 10% 的缓冲空间
+              title: { display: true, text: '影长(cm)', font: { size: 10 } },
+              grid: { color: '#f0f0f0' }
+            }
+          },
+          plugins: {
+            // 全局 datalabels 配置 (默认关闭，在 dataset 中单独开启)
+            datalabels: {
+               display: false
+            },
+            title: {
+              display: true,
+              text: `${year}年 观测数据`,
+              font: { size: 14, weight: 'bold' },
+              color: '#2D593E',
+              padding: { top: 5, bottom: 5 }
+            },
+            legend: {
+              display: true,
+              labels: { boxWidth: 8, usePointStyle: true, font: { size: 10 } }
+            },
+            tooltip: {
+              enabled: false // 关闭 tooltip，因为已经有 datalabels 了
+            }
+          }
+        }
+      };
+    }
+
+    // 初始化三个图表
+    charts[2024] = new Chart(document.getElementById('chart2024').getContext('2d'), createChartConfig(2024, '#2563EB'));
+    charts[2025] = new Chart(document.getElementById('chart2025').getContext('2d'), createChartConfig(2025, '#059669'));
+
+    function updateCharts() {
+      const currentMonth = parseInt(document.getElementById('monthInput').value);
+      if (!currentMonth) return;
+      
+      const filteredRecords = records.filter(r =&gt; r.month === currentMonth);
+      
+      [2024, 2025].forEach(year =&gt; {
+        const chart = charts[year];
+        // 关键修复：对记录按日期排序，防止连线错乱
+        const yearRecords = filteredRecords
+          .filter(r =&gt; r.year === year)
+          .sort((a, b) =&gt; a.day - b.day);
+        
+        // 更新记录点
+        chart.data.datasets[0].data = yearRecords.map(r =&gt; ({
+          x: r.day - 1,
+          y: r.length,
+          _recordIndex: records.indexOf(r)
+        }));
+        
+        // 禁用动画以提高性能
+        chart.update('none');
+      });
+    }
+    
+    function updatePreviewPoint(data) {
+       const year = data.year;
+       const chart = charts[year];
+       
+       // 清除所有图表的预览点
+       Object.values(charts).forEach(c =&gt; {
+         c.data.datasets[1].data = [];
+         c.update();
+       });
+       
+       // 只在当前年份图表显示预览点
+       if (chart) {
+         chart.data.datasets[1].data = [{
+           x: data.day - 1,
+           y: data.length
+         }];
+         chart.update();
+       }
+    }
+
+    // 初始化
+    // 默认选中2024年
+    setYear(2024);
+    // 默认显示3月份
+    document.getElementById('monthInput').value = 3;
+    handleMonthInput(3);
+    // 默认模拟1日
+    simulateDay(3, 1);
+
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;" frameborder="0">
+    </iframe>
+  </div>
+
+
+  <script>
+
+    function getIsMobile() {
+      const width = document.documentElement.clientWidth
+      const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|iPad|Windows Phone|Mobile/i.test(navigator.userAgent) || width <= 768
+      return isMobile
+    }
+
+
+    // ==================== 埋点相关代码 ====================
+
+    /**
+     * 页面停留时长统计
+     */
+    (function () {
+      let startTime = null
+      let totalTime = 0
+      let reportTimer = null // 防抖定时器
+
+      // 开始计时
+      function startTimer() {
+        if (!startTime) {
+          startTime = Date.now()
+          console.log('[埋点] 开始计时')
+        }
+      }
+
+      // 停止计时并累加时长
+      function stopTimer() {
+        if (startTime) {
+          totalTime += Date.now() - startTime
+          startTime = null
+          console.log('[埋点] 停止计时，累计时长:', Math.floor(totalTime / 1000), '秒')
+        }
+      }
+
+      // 检查页面是否真正可见
+      function isPageVisible() {
+        // 检查 document.hidden
+        if (document.hidden) {
+          return false
+        }
+
+        // 检查 document.visibilityState
+        if (document.visibilityState && document.visibilityState !== 'visible') {
+          return false
+        }
+
+        // 检查窗口是否有焦点
+        if (!document.hasFocus()) {
+          return false
+        }
+
+        return true
+      }
+
+      // 上报停留时长（带防抖）
+      function reportStayTime(eventType, immediate = false) {
+        stopTimer()
+
+        // 清除之前的定时器
+        if (reportTimer) {
+          clearTimeout(reportTimer)
+          reportTimer = null
+        }
+
+        // 如果是立即上报（如页面卸载），不使用防抖
+        if (immediate) {
+          doReport(eventType)
+          return
+        }
+
+        // 使用防抖，避免短时间内多次上报
+        // 100ms 内如果有多个事件触发，只上报最后一次
+        reportTimer = setTimeout(function () {
+          doReport(eventType)
+          reportTimer = null
+        }, 100)
+      }
+
+      // 实际执行上报
+      function doReport(eventType) {
+        if (window.frog && totalTime > 0) {
+          const serverData = window.__SERVER_DATA__ || {}
+          const chatId = serverData.watermarkChatId
+          window.frog.add({
+            url: '/time/HtmlPage/enter',
+            eventId: 42818,
+            customExtend: {
+              chat_id: chatId,
+              use_time: Math.floor(totalTime / 1000), // 转换为秒
+            },
+            duration: Math.floor(totalTime / 1000), // 转换为秒,
+            currentPage: 'HtmlPage',
+            eventAction: 'time',
+            eventName: 'enter'
+          })
+          console.log(`[埋点] 页面停留时长上报 (${eventType}):`, Math.floor(totalTime / 1000), '秒')
+
+          // 上报后重置累计时长，为下次统计做准备
+          totalTime = 0
+        }
+      }
+
+      // 清理函数：移除所有事件监听器
+      function cleanup() {
+        console.log('[埋点] 清理计时器资源')
+
+        // 清除防抖定时器
+        if (reportTimer) {
+          clearTimeout(reportTimer)
+          reportTimer = null
+        }
+
+        // 移除事件监听器
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
+        window.removeEventListener('blur', handleBlur)
+        window.removeEventListener('focus', handleFocus)
+        window.removeEventListener('beforeunload', handleBeforeUnload)
+        window.removeEventListener('pagehide', handlePageHide)
+
+        // 重置变量
+        startTime = null
+        totalTime = 0
+      }
+
+      // 事件处理函数（需要命名以便移除）
+      function handleVisibilityChange() {
+        if (document.hidden) {
+          // 页面不可见，停止计时并上报
+          console.log('[埋点] visibilitychange - 页面隐藏')
+          reportStayTime('visibilitychange')
+        } else {
+          // 页面可见，开始新的计时
+          console.log('[埋点] visibilitychange - 页面显示，开始新的计时')
+          startTimer()
+        }
+      }
+
+      function handleBlur() {
+        // 窗口失去焦点，停止计时并上报
+        console.log('[埋点] blur - 窗口失去焦点')
+        reportStayTime('blur')
+      }
+
+      function handleFocus() {
+        // 窗口获得焦点，开始新的计时
+        console.log('[埋点] focus - 窗口获得焦点，开始新的计时')
+        startTimer()
+      }
+
+      function handleBeforeUnload() {
+        // 页面卸载前立即上报（不使用防抖）
+        console.log('[埋点] beforeunload - 页面即将卸载')
+        reportStayTime('beforeunload', true)
+        cleanup()
+      }
+
+      function handlePageHide() {
+        // 页面隐藏时立即上报（iOS Safari 更可靠，不使用防抖）
+        console.log('[埋点] pagehide - 页面隐藏')
+        reportStayTime('pagehide', true)
+      }
+
+      function handleDOMContentLoaded() {
+        if (isPageVisible()) {
+          startTimer()
+        }
+      }
+
+      // 监听页面可见性变化
+      document.addEventListener('visibilitychange', handleVisibilityChange)
+
+      // 监听窗口失去/获得焦点
+      window.addEventListener('blur', handleBlur)
+      window.addEventListener('focus', handleFocus)
+
+      // 页面加载完成后开始计时
+      if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', handleDOMContentLoaded)
+      } else {
+        if (isPageVisible()) {
+          startTimer()
+        }
+      }
+
+      // 页面卸载时上报
+      window.addEventListener('beforeunload', handleBeforeUnload)
+
+      // 兼容性：监听 pagehide 事件（iOS Safari 更可靠）
+      window.addEventListener('pagehide', handlePageHide)
+    })()
+
+    function adjustRem() {
+      const pcBaseWidth = 375 // 设计稿
+      const width = document.documentElement.clientWidth
+      document.documentElement.style.fontSize = `${(width / pcBaseWidth * 100).toFixed(2)}px`
+    }
+
+
+    // 移动端检测和按钮隐藏逻辑
+    function checkAndHideButtonOnMobile() {
+      const isMobile = getIsMobile()
+      if (isMobile) {
+        adjustRem()
+      }
+      const iframeContainer = document.querySelector('.iframe-container');
+
+      // 移动端时给iframe-container添加类名，否则移除类名
+      if (iframeContainer) {
+        if (isMobile) {
+          iframeContainer.classList.add('mobile');
+        } else {
+          iframeContainer.classList.remove('mobile');
+        }
+      }
+    }
+
+
+    function handleResize() {
+      // 响应式处理：重新检测移动端并处理按钮显示/隐藏
+      checkAndHideButtonOnMobile();
+
+      // 在窗口大小变化时，重新应用移动端相关的逻辑
+      const isMobile = getIsMobile()
+      const iframeContainer = document.querySelector('.iframe-container');
+
+      // 确保在resize时也能正确添加或移除mobile类
+      if (iframeContainer) {
+        if (isMobile) {
+          iframeContainer.classList.add('mobile');
+        } else {
+          iframeContainer.classList.remove('mobile');
+        }
+      }
+    }
+
+    // 防止iframe内容溢出
+    window.addEventListener('resize', handleResize);
+
+    // 页面加载完成后执行移动端检测
+    document.addEventListener('DOMContentLoaded', checkAndHideButtonOnMobile);
+
+    // 清理所有事件绑定的函数
+    function clearAllEvents() {
+      // 清除 resize 事件监听器
+      window.removeEventListener('resize', handleResize);
+
+      // 清除 DOMContentLoaded 事件监听器
+      document.removeEventListener('DOMContentLoaded', checkAndHideButtonOnMobile);
+    }
+
+    // 页面卸载时自动清理事件（可选）
+    window.addEventListener('beforeunload', clearAllEvents);
+
+  </script>
+</body>
+</html>
