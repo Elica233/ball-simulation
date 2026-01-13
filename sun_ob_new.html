@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generation-source" content="AI生成">
+  <title>小陈老师的AI工具</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .iframe-container {
+      box-sizing: border-box;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .iframe-container.mobile {
+      padding: 0;
+      .content-iframe {
+        border: transparent;
+        border-radius: 0;
+      }
+    }
+
+    .content-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      border: 0.5px solid #C9DACC;
+      border-radius: 16px;
+    }
+
+    .ai-badge {
+      position: fixed;
+      right: 37px;
+      bottom: 37px;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 24px;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  </style>
+  <!-- 后端传值 保留基础结构 不影响离线使用 -->
+  <script>
+    window.__SERVER_DATA__ = {
+      watermarkChatId: "D38C2C43B01D5BE75BFF3C73F5D5CFF8",
+      watermarkEnv: "online",
+      watermarkUrl: "",
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- 主要内容容器 - 无水印、无悬浮层 -->
+  <div class="iframe-container">
+    <iframe class="content-iframe" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;小陈老师的AI工具 - 每日影长测量模型&lt;/title&gt;
+    &lt;!-- Tailwind CSS --&gt;
+    &lt;script src=&quot;https://metis-online.fbcontent.cn/metis-misc/zgLDUdmazTYc0B4K6Cor.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- Three.js --&gt;
+    &lt;script src=&quot;https://metis-online.fbcontent.cn/metis-misc/RzWcgrRY7zuXErSSLsDmh0.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- OrbitControls --&gt;
+    &lt;script src=&quot;https://metis-online.fbcontent.cn/metis-misc/PHKmR6MjMLnuPRSU9CYwog.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- Anime.js --&gt;
+    &lt;script src=&quot;https://metis-online.fbcontent.cn/metis-misc/zZZY40t7WJC7UdQCPACm.js&quot;&gt;&lt;/script&gt;
+    
+    &lt;script&gt;
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0ea5e9', // Sky blue
+                        secondary: '#10b981', // Emerald
+                        accent: '#f59e0b', // Amber for sun
+                        dark: '#0f172a',
+                    }
+                }
+            }
+        }
+    &lt;/script&gt;
+    &lt;style&gt;
+        body { margin: 0; overflow: hidden; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: -4px 0 20px rgba(0,0,0,0.05);
+        }
+        
+        input[type=&quot;date&quot;] {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class=&quot;bg-gray-50 flex h-screen w-screen overflow-hidden font-sans&quot;&gt;
+
+    &lt;!-- 左侧区域：上部3D场景 + 下部表格 --&gt;
+    &lt;div class=&quot;flex-1 flex flex-col h-full relative min-w-0&quot;&gt;
+        
+        &lt;!-- 3D 场景 (自适应高度) --&gt;
+        &lt;div id=&quot;canvas-container&quot; class=&quot;flex-1 relative w-full bg-gradient-to-b from-sky-200 to-sky-50 shadow-inner overflow-hidden&quot;&gt;
+        &lt;!-- 场景覆盖层信息 - 修改标题 --&gt;
+        &lt;div class=&quot;absolute top-6 left-6 bg-white/80 backdrop-blur px-4 py-2 rounded-lg shadow-sm pointer-events-none select-none z-10&quot;&gt;
+            &lt;h2 class=&quot;text-lg font-bold text-gray-800&quot;&gt;每日影长测量模型&lt;/h2&gt;
+            &lt;p class=&quot;text-sm text-gray-600&quot;&gt;观测地：北纬 30&deg;&lt;/p&gt;
+            &lt;p class=&quot;text-sm text-gray-600 mt-1&quot;&gt;竿长：2米&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;!-- 影子数据标签 (跟随3D物体) --&gt;
+        &lt;div id=&quot;shadow-label&quot; class=&quot;absolute hidden bg-black/75 text-white text-xs px-2 py-1 rounded pointer-events-none whitespace-nowrap z-30 transform -translate-x-1/2 -translate-y-full&quot;&gt;
+            --
+        &lt;/div&gt;
+        
+        &lt;!-- 当前时间指示 --&gt;
+        &lt;div id=&quot;time-indicator&quot; class=&quot;absolute top-6 right-6 bg-accent/90 text-white px-4 py-2 rounded-full shadow-md font-mono font-bold hidden z-10&quot;&gt;
+            12:00
+        &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- 底部：历史记录表格 (固定高度，不遮挡3D) --&gt;
+        &lt;div class=&quot;h-[300px] bg-white border-t border-gray-200 flex flex-col z-20 relative shadow-[0_-4px_20px_rgba(0,0,0,0.05)]&quot;&gt;
+            &lt;div class=&quot;px-6 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50&quot;&gt;
+                &lt;h4 class=&quot;font-bold text-gray-800 flex items-center gap-2&quot;&gt;
+                    &lt;span class=&quot;w-2 h-2 rounded-full bg-primary&quot;&gt;&lt;/span&gt;
+                    历史记录表
+                &lt;/h4&gt;
+                &lt;span class=&quot;text-xs text-gray-400&quot;&gt;单位：厘米&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class=&quot;flex-1 overflow-auto custom-scrollbar&quot;&gt;
+                &lt;table class=&quot;w-full text-left border-collapse&quot;&gt;
+                    &lt;thead class=&quot;bg-gray-100 text-gray-500 text-xs font-bold uppercase tracking-wider sticky top-0 z-10&quot;&gt;
+                        &lt;tr&gt;
+                            &lt;th class=&quot;px-6 py-3 border-b border-gray-200&quot;&gt;日期&lt;/th&gt;
+                            &lt;th class=&quot;px-2 py-3 border-b border-gray-200 text-center&quot;&gt;08:00&lt;/th&gt;
+                            &lt;th class=&quot;px-2 py-3 border-b border-gray-200 text-center&quot;&gt;10:00&lt;/th&gt;
+                            &lt;th class=&quot;px-2 py-3 border-b border-gray-200 text-center text-amber-600&quot;&gt;12:00&lt;/th&gt;
+                            &lt;th class=&quot;px-2 py-3 border-b border-gray-200 text-center&quot;&gt;14:00&lt;/th&gt;
+                            &lt;th class=&quot;px-2 py-3 border-b border-gray-200 text-center&quot;&gt;16:00&lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody id=&quot;record-table-body&quot; class=&quot;divide-y divide-gray-100 bg-white&quot;&gt;
+                        &lt;tr id=&quot;empty-tip&quot;&gt;
+                            &lt;td colspan=&quot;6&quot; class=&quot;px-6 py-12 text-center text-gray-400 italic&quot;&gt;
+                                &lt;div class=&quot;flex flex-col items-center gap-2&quot;&gt;
+                                    &lt;svg class=&quot;w-8 h-8 text-gray-300&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;1.5&quot; d=&quot;M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2&quot;&gt;&lt;/path&gt;&lt;/svg&gt;
+                                    &lt;span&gt;暂无数据，请生成并记录&lt;/span&gt;
+                                &lt;/div&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 右侧 功能区 (占比 40%，固定宽度) --&gt;
+    &lt;div class=&quot;w-[550px] h-full bg-white/90 backdrop-blur-xl border-l border-white/50 shadow-2xl flex flex-col z-20 relative&quot;&gt;
+        
+        &lt;!-- 顶部：标题与控制 - 修改标题为小陈老师的AI工具 --&gt;
+        &lt;div class=&quot;p-8 border-b border-gray-100 bg-white/50&quot;&gt;
+            &lt;div class=&quot;flex items-center gap-3 mb-6&quot;&gt;
+                &lt;div class=&quot;w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20&quot;&gt;
+                    &lt;svg class=&quot;w-6 h-6&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;
+                &lt;/div&gt;
+                &lt;div&gt;
+                    &lt;h1 class=&quot;text-2xl font-bold text-gray-800 tracking-tight&quot;&gt;每日影长测量&lt;/h1&gt;
+                    &lt;p class=&quot;text-xs text-gray-500 font-medium&quot;&gt;小陈老师的AI工具 &middot; 北纬 30&deg; &middot; 竿长 2米&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- 日期选择 --&gt;
+            &lt;div class=&quot;bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6&quot;&gt;
+                &lt;label class=&quot;block text-xs font-bold text-gray-400 uppercase tracking-wider mb-3&quot;&gt;观测日期设定&lt;/label&gt;
+                &lt;div class=&quot;flex gap-3&quot;&gt;
+                    &lt;div class=&quot;flex-1 relative group&quot;&gt;
+                        &lt;input type=&quot;number&quot; id=&quot;year-input&quot; value=&quot;2025&quot; class=&quot;w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-gray-700 text-center font-bold text-lg shadow-sm group-hover:border-primary/50&quot;&gt;
+                        &lt;span class=&quot;absolute right-3 top-3.5 text-gray-400 text-xs font-medium pointer-events-none&quot;&gt;年&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;w-24 relative group&quot;&gt;
+                        &lt;input type=&quot;number&quot; id=&quot;month-input&quot; value=&quot;1&quot; min=&quot;1&quot; max=&quot;12&quot; class=&quot;w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-gray-700 text-center font-bold text-lg shadow-sm group-hover:border-primary/50&quot;&gt;
+                        &lt;span class=&quot;absolute right-3 top-3.5 text-gray-400 text-xs font-medium pointer-events-none&quot;&gt;月&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;w-24 relative group&quot;&gt;
+                        &lt;input type=&quot;number&quot; id=&quot;day-input&quot; value=&quot;1&quot; min=&quot;1&quot; max=&quot;31&quot; class=&quot;w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-gray-700 text-center font-bold text-lg shadow-sm group-hover:border-primary/50&quot;&gt;
+                        &lt;span class=&quot;absolute right-3 top-3.5 text-gray-400 text-xs font-medium pointer-events-none&quot;&gt;日&lt;/span&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- 操作按钮组 --&gt;
+            &lt;div class=&quot;grid grid-cols-2 gap-4&quot;&gt;
+                &lt;button id=&quot;calc-btn&quot; class=&quot;col-span-1 bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-gray-900/20 transform transition-all active:scale-95 flex items-center justify-center gap-2&quot;&gt;
+                    &lt;svg class=&quot;w-5 h-5&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;
+                    计算数据
+                &lt;/button&gt;
+                &lt;button id=&quot;animate-btn&quot; class=&quot;col-span-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-500/30 transform transition-all active:scale-95 flex items-center justify-center gap-2&quot;&gt;
+                    &lt;svg class=&quot;w-5 h-5&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z&quot;&gt;&lt;/path&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M21 12a9 9 0 11-18 0 9 9 0 0118 0z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;
+                    演示全天
+                &lt;/button&gt;
+                &lt;button id=&quot;show-all-btn&quot; disabled class=&quot;col-span-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-indigo-500/30 transform transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2&quot;&gt;
+                    &lt;svg class=&quot;w-5 h-5&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M4 6h16M4 10h16M4 14h16M4 18h16&quot;&gt;&lt;/path&gt;&lt;/svg&gt;
+                    一键呈现5时刻
+                &lt;/button&gt;
+                &lt;button id=&quot;record-btn&quot; disabled class=&quot;col-span-2 bg-gradient-to-r from-primary to-blue-500 hover:from-blue-400 hover:to-blue-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-blue-500/30 transform transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2&quot;&gt;
+                    &lt;svg class=&quot;w-5 h-5&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; stroke-width=&quot;2&quot; d=&quot;M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;
+                    记录数据
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- 中部：时刻选择 (仅显示时刻) --&gt;
+        &lt;div class=&quot;px-8 py-6 bg-white border-b border-gray-100&quot;&gt;
+            &lt;div class=&quot;flex justify-between items-end mb-4&quot;&gt;
+                &lt;h4 class=&quot;text-sm font-bold text-gray-400 uppercase tracking-wider&quot;&gt;点击时刻查看影子&lt;/h4&gt;
+                &lt;span id=&quot;current-date-display&quot; class=&quot;text-sm font-mono font-bold text-primary bg-primary/10 px-2 py-1 rounded&quot;&gt;--&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;grid grid-cols-5 gap-3&quot;&gt;
+                &lt;button onclick=&quot;selectTime(8)&quot; class=&quot;cursor-pointer hover:bg-primary hover:text-white hover:border-primary transition-all flex items-center justify-center py-3 bg-gray-50 rounded-xl border border-gray-200 font-bold text-gray-600 shadow-sm active:scale-95&quot;&gt;
+                    08:00
+                &lt;/button&gt;
+                &lt;button onclick=&quot;selectTime(10)&quot; class=&quot;cursor-pointer hover:bg-primary hover:text-white hover:border-primary transition-all flex items-center justify-center py-3 bg-gray-50 rounded-xl border border-gray-200 font-bold text-gray-600 shadow-sm active:scale-95&quot;&gt;
+                    10:00
+                &lt;/button&gt;
+                &lt;button onclick=&quot;selectTime(12)&quot; class=&quot;cursor-pointer hover:bg-amber-500 hover:text-white hover:border-amber-500 transition-all flex items-center justify-center py-3 bg-amber-50 rounded-xl border border-amber-200 font-bold text-amber-600 shadow-sm active:scale-95&quot;&gt;
+                    12:00
+                &lt;/button&gt;
+                &lt;button onclick=&quot;selectTime(14)&quot; class=&quot;cursor-pointer hover:bg-primary hover:text-white hover:border-primary transition-all flex items-center justify-center py-3 bg-gray-50 rounded-xl border border-gray-200 font-bold text-gray-600 shadow-sm active:scale-95&quot;&gt;
+                    14:00
+                &lt;/button&gt;
+                &lt;button onclick=&quot;selectTime(16)&quot; class=&quot;cursor-pointer hover:bg-primary hover:text-white hover:border-primary transition-all flex items-center justify-center py-3 bg-gray-50 rounded-xl border border-gray-200 font-bold text-gray-600 shadow-sm active:scale-95&quot;&gt;
+                    16:00
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- 底部占位 (可选，保持右侧栏视觉完整性) --&gt;
+        &lt;div class=&quot;flex-1 bg-gray-50/30&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script type=&quot;module&quot;&gt;
+        // --- 1. Three.js 场景初始化 ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xe0f2fe); // 天空蓝
+        scene.fog = new THREE.Fog(0xe0f2fe, 20, 100);
+
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(0, 6, 10); // 稍微拉远一点，保证视野
+        camera.lookAt(0, 2.5, 0); // 看向竿子上方，使竿子在屏幕中下移（靠近表格）
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.target.set(0, 2.5, 0); // 设置旋转中心也为竿子上方
+        controls.maxPolarAngle = Math.PI / 2 - 0.1; // 防止相机钻入地下
+        controls.minDistance = 5;
+        controls.maxDistance = 50;
+
+        // --- 2. 场景物体 ---
+        
+        // 地面 (极简风格)
+        const planeGeometry = new THREE.PlaneGeometry(100, 100);
+        const planeMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xf8fafc, // 极淡的灰白色，减少干扰
+        });
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.rotation.x = -Math.PI / 2;
+        plane.receiveShadow = true;
+        scene.add(plane);
+
+        // 竿子 (高度2米)
+        const POLE_HEIGHT = 2;
+        const poleGeometry = new THREE.CylinderGeometry(0.05, 0.05, POLE_HEIGHT, 32);
+        const poleMaterial = new THREE.MeshStandardMaterial({ color: 0x475569 });
+        const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+        pole.position.y = POLE_HEIGHT / 2;
+        pole.castShadow = true;
+        pole.receiveShadow = true;
+        scene.add(pole);
+
+        // 太阳 (光源 + 可视化球体)
+        const sunGroup = new THREE.Group();
+        scene.add(sunGroup);
+
+        // 平行光模拟太阳光 (仅用于产生阴影，不影响整体亮度)
+        const sunLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        sunLight.castShadow = true;
+        sunLight.shadow.mapSize.width = 2048;
+        sunLight.shadow.mapSize.height = 2048;
+        sunLight.shadow.camera.near = 0.5;
+        sunLight.shadow.camera.far = 100;
+        sunLight.shadow.camera.left = -50;
+        sunLight.shadow.camera.right = 50;
+        sunLight.shadow.camera.top = 50;
+        sunLight.shadow.camera.bottom = -50;
+        sunGroup.add(sunLight);
+
+        // 太阳可视化球体
+        const sunMesh = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 16, 16),
+            new THREE.MeshBasicMaterial({ color: 0xf59e0b })
+        );
+        sunGroup.add(sunMesh);
+
+        // 环境光 (增强亮度，消除明暗变化)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        // --- 3. 天文计算逻辑 ---
+        
+        // 纬度 (北纬 30度)
+        const LATITUDE = 30; 
+        const LAT_RAD = LATITUDE * Math.PI / 180;
+
+        // 计算一年中的第几天
+        function getDayOfYear(date) {
+            const start = new Date(date.getFullYear(), 0, 0);
+            const diff = date - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            return Math.floor(diff / oneDay);
+        }
+
+        // 计算太阳赤纬角 delta (单位: 弧度)
+        function getDeclination(date) {
+            const n = getDayOfYear(date);
+            const angle = 2 * Math.PI * (n + 284) / 365;
+            const deltaDeg = 23.45 * Math.sin(angle);
+            return deltaDeg * Math.PI / 180;
+        }
+
+        // 计算太阳位置
+        function calculateSunPosition(date, hour) {
+            const delta = getDeclination(date);
+            const omegaDeg = (hour - 12) * 15;
+            const omega = omegaDeg * Math.PI / 180;
+
+            const sinAlpha = Math.sin(LAT_RAD) * Math.sin(delta) + 
+                             Math.cos(LAT_RAD) * Math.cos(delta) * Math.cos(omega);
+            const alpha = Math.asin(sinAlpha);
+
+            let cosA = (Math.sin(alpha) * Math.sin(LAT_RAD) - Math.sin(delta)) / 
+                       (Math.cos(alpha) * Math.cos(LAT_RAD));
+            
+            if (cosA &gt; 1) cosA = 1;
+            if (cosA &lt; -1) cosA = -1;
+            
+            let A = Math.acos(cosA);
+            if (hour &lt; 12) A = -A;
+
+            const DISTANCE = 20;
+            const y = DISTANCE * Math.sin(alpha);
+            const r = DISTANCE * Math.cos(alpha);
+            const x = -r * Math.sin(A);
+            const z = r * Math.cos(A);
+
+            let shadowLen = 0;
+            if (alpha &gt; 0) {
+                shadowLen = POLE_HEIGHT / Math.tan(alpha);
+            } else {
+                shadowLen = 0;
+            }
+
+            return { x, y, z, shadowLen, alphaDeg: alpha * 180 / Math.PI };
+        }
+
+        // --- 4. 交互逻辑 ---
+        
+        const yearInput = document.getElementById('year-input');
+        const monthInput = document.getElementById('month-input');
+        const dayInput = document.getElementById('day-input');
+        const calcBtn = document.getElementById('calc-btn');
+        const animateBtn = document.getElementById('animate-btn');
+        const showAllBtn = document.getElementById('show-all-btn');
+        const recordBtn = document.getElementById('record-btn');
+        const timeIndicator = document.getElementById('time-indicator');
+        const shadowLabel = document.getElementById('shadow-label');
+        
+        let currentData = null;
+        let currentShadowTipPos = null;
+        const addedHours = new Set();
+        
+        const staticShadowGroup = new THREE.Group();
+        scene.add(staticShadowGroup);
+
+        const dynShadowGeo = new THREE.PlaneGeometry(0.1, 1);
+        dynShadowGeo.translate(0, 0.5, 0);
+        dynShadowGeo.rotateX(Math.PI / 2);
+        const dynShadowMat = new THREE.MeshBasicMaterial({ 
+            color: 0x000000, 
+            transparent: true, 
+            opacity: 0.5,
+            side: THREE.DoubleSide
+        });
+        const dynamicShadow = new THREE.Mesh(dynShadowGeo, dynShadowMat);
+        dynamicShadow.position.y = 0.02;
+        dynamicShadow.visible = false;
+        scene.add(dynamicShadow);
+
+        function updateSun(date, hour, showLabel = true) {
+            const pos = calculateSunPosition(date, hour);
+            
+            if (pos.y &lt; 0) pos.y = 0;
+
+            sunGroup.position.set(pos.x, pos.y, pos.z);
+            sunLight.position.set(0, 0, 0);
+            sunLight.target.position.set(-pos.x, -pos.y, -pos.z);
+            sunLight.target.updateMatrixWorld();
+            
+            sunLight.intensity = 0.8;
+            ambientLight.intensity = 0.6;
+            
+            if (pos.y &gt; 0.01) {
+                const ratio = POLE_HEIGHT / pos.y;
+                const tipX = -pos.x * ratio;
+                const tipZ = -pos.z * ratio;
+                const len = Math.sqrt(tipX*tipX + tipZ*tipZ);
+                
+                dynamicShadow.visible = true;
+                dynamicShadow.scale.set(1, 1, len);
+                dynamicShadow.lookAt(tipX, 0.02, tipZ);
+                
+                let opacity = 0.5;
+                if (len &gt; 10) {
+                    opacity = Math.max(0, 0.5 * (1 - (len - 10) / 10));
+                }
+                dynamicShadow.material.opacity = opacity;
+                dynamicShadow.visible = opacity &gt; 0.01;
+                
+            } else {
+                dynamicShadow.visible = false;
+            }
+            
+            if (showLabel &amp;&amp; pos.y &gt; 0.1) {
+                const ratio = POLE_HEIGHT / pos.y;
+                const shadowTipX = -pos.x * ratio;
+                const shadowTipZ = -pos.z * ratio;
+                currentShadowTipPos = new THREE.Vector3(shadowTipX, 0, shadowTipZ);
+                
+                const lenCm = (pos.shadowLen * 100).toFixed(1);
+                const h = Math.floor(hour);
+                const m = Math.floor((hour - h) * 60);
+                const timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+                
+                shadowLabel.innerHTML = `&lt;b&gt;${timeStr}&lt;/b&gt;&lt;br&gt;影长: ${lenCm} cm`;
+                shadowLabel.classList.remove('hidden');
+                timeIndicator.textContent = timeStr;
+                timeIndicator.classList.remove('hidden');
+            } else {
+                shadowLabel.classList.add('hidden');
+                currentShadowTipPos = null;
+            }
+
+            return pos.shadowLen;
+        }
+
+        updateSun(new Date(), 12, false);
+
+        function drawStaticShadow(date, hour) {
+            const pos = calculateSunPosition(date, hour);
+            if (pos.y &lt;= 0) return;
+            
+            const ratio = POLE_HEIGHT / pos.y;
+            const tipX = -pos.x * ratio;
+            const tipZ = -pos.z * ratio;
+            const len = Math.sqrt(tipX*tipX + tipZ*tipZ);
+            
+            const geometry = new THREE.PlaneGeometry(0.1, 1);
+            geometry.translate(0, 0.5, 0);
+            geometry.rotateX(Math.PI/2);
+            geometry.scale(1, 1, len);
+            
+            const material = new THREE.MeshBasicMaterial({ 
+                color: 0x000000, 
+                transparent: true, 
+                opacity: 0.3,
+                side: THREE.DoubleSide
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.y = 0.01;
+            
+            mesh.lookAt(tipX, 0.01, tipZ);
+            
+            staticShadowGroup.add(mesh);
+            
+            const lenCm = (pos.shadowLen * 100).toFixed(1);
+            const h = Math.floor(hour);
+            const m = Math.floor((hour - h) * 60);
+            const timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 512;
+            canvas.height = 256;
+            
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.roundRect(0, 0, 512, 256, 40);
+            ctx.fill();
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 96px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(timeStr, 256, 80);
+            
+            ctx.font = '72px Arial';
+            ctx.fillStyle = '#fbbf24';
+            ctx.fillText(`${lenCm} cm`, 256, 180);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+            
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            
+            let labelHeight = 1.5;
+            if (hour === 12) labelHeight = 4.5;
+            else if (hour === 10 || hour === 14) labelHeight = 3.0;
+            else labelHeight = 1.5;
+
+            sprite.position.set(tipX, labelHeight, tipZ);
+            sprite.scale.set(3, 1.5, 1);
+            sprite.renderOrder = 999;
+            
+            staticShadowGroup.add(sprite);
+            
+            const lineGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(tipX, 0, tipZ),
+                new THREE.Vector3(tipX, labelHeight, tipZ)
+            ]);
+            const lineMat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.3 });
+            const line = new THREE.Line(lineGeo, lineMat);
+            staticShadowGroup.add(line);
+        }
+
+        window.selectTime = (hour) =&gt; {
+            if (!currentData) {
+                calcBtn.click();
+                if (!currentData) return;
+            }
+            
+            const y = parseInt(yearInput.value);
+            const m = parseInt(monthInput.value);
+            const d = parseInt(dayInput.value);
+            const date = new Date(y, m - 1, d);
+            
+            if (!addedHours.has(hour)) {
+                drawStaticShadow(date, hour);
+                addedHours.add(hour);
+            }
+            
+            updateSun(date, hour, false);
+        };
+
+        animateBtn.addEventListener('click', () =&gt; {
+            const y = parseInt(yearInput.value);
+            const m = parseInt(monthInput.value);
+            const d = parseInt(dayInput.value);
+            const date = new Date(y, m - 1, d);
+            
+            staticShadowGroup.clear();
+            addedHours.clear();
+            shadowLabel.classList.add('hidden');
+            currentShadowTipPos = null;
+            
+            animateBtn.disabled = true;
+            calcBtn.disabled = true;
+            showAllBtn.disabled = true;
+            recordBtn.disabled = true;
+            
+            const startHour = 7.5;
+            const endHour = 16.5;
+            const duration = 3000;
+            let startTime = null;
+            
+            function loop(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = (timestamp - startTime) / duration;
+                
+                if (progress &lt; 1) {
+                    const currentHour = startHour + (endHour - startHour) * progress;
+                    updateSun(date, currentHour, false);
+                    
+                    const h = Math.floor(currentHour);
+                    const min = Math.floor((currentHour - h) * 60);
+                    timeIndicator.textContent = `${h.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
+                    timeIndicator.classList.remove('hidden');
+                    
+                    requestAnimationFrame(loop);
+                } else {
+                    updateSun(date, 12, false);
+                    timeIndicator.classList.add('hidden');
+                    
+                    animateBtn.disabled = false;
+                    calcBtn.disabled = false;
+                    if (currentData) {
+                        showAllBtn.disabled = false;
+                        recordBtn.disabled = false;
+                    }
+                }
+            }
+            
+            requestAnimationFrame(loop);
+        });
+
+        calcBtn.addEventListener('click', () =&gt; {
+            const y = parseInt(yearInput.value);
+            const m = parseInt(monthInput.value);
+            const d = parseInt(dayInput.value);
+            
+            if (!y || !m || !d) return;
+            
+            staticShadowGroup.clear();
+            addedHours.clear();
+            
+            const date = new Date(y, m - 1, d);
+            const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+            const times = [8, 10, 12, 14, 16];
+            const results = {};
+
+            times.forEach(t =&gt; {
+                const res = calculateSunPosition(date, t);
+                results[t] = (res.alphaDeg &gt; 0) ? (res.shadowLen * 100).toFixed(1) : &quot;无&quot;;
+            });
+
+            document.getElementById('current-date-display').textContent = dateStr;
+
+            currentData = { date: dateStr, ...results };
+            recordBtn.disabled = false;
+            showAllBtn.disabled = false;
+        });
+        
+        showAllBtn.addEventListener('click', () =&gt; {
+            if (!currentData) return;
+            const y = parseInt(yearInput.value);
+            const m = parseInt(monthInput.value);
+            const d = parseInt(dayInput.value);
+            const date = new Date(y, m - 1, d);
+            
+            staticShadowGroup.clear();
+            addedHours.clear();
+            
+            [8, 10, 12, 14, 16].forEach(h =&gt; {
+                drawStaticShadow(date, h);
+                addedHours.add(h);
+            });
+            
+            shadowLabel.classList.add('hidden');
+            currentShadowTipPos = null;
+            
+            dynamicShadow.visible = false;
+            
+            updateSun(date, 12, false);
+        });
+
+        recordBtn.addEventListener('click', () =&gt; {
+            if (!currentData) return;
+
+            const tbody = document.getElementById('record-table-body');
+            const emptyTip = document.getElementById('empty-tip');
+            if (emptyTip) emptyTip.remove();
+
+            const tr = document.createElement('tr');
+            tr.className = &quot;hover:bg-blue-50/50 transition-colors group&quot;;
+            tr.innerHTML = `
+                &lt;td class=&quot;px-6 py-4 border-b border-gray-50 font-mono text-gray-600 font-medium group-hover:text-primary transition-colors&quot;&gt;${currentData.date}&lt;/td&gt;
+                &lt;td class=&quot;px-2 py-4 border-b border-gray-50 font-bold text-gray-800 text-center&quot;&gt;${currentData[8]}&lt;/td&gt;
+                &lt;td class=&quot;px-2 py-4 border-b border-gray-50 font-bold text-gray-800 text-center&quot;&gt;${currentData[10]}&lt;/td&gt;
+                &lt;td class=&quot;px-2 py-4 border-b border-gray-50 font-bold text-amber-600 text-lg text-center bg-amber-50/30&quot;&gt;${currentData[12]}&lt;/td&gt;
+                &lt;td class=&quot;px-2 py-4 border-b border-gray-50 font-bold text-gray-800 text-center&quot;&gt;${currentData[14]}&lt;/td&gt;
+                &lt;td class=&quot;px-2 py-4 border-b border-gray-50 font-bold text-gray-800 text-center&quot;&gt;${currentData[16]}&lt;/td&gt;
+            `;
+            
+            tbody.appendChild(tr);
+            
+            tr.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            anime({
+                targets: tr,
+                opacity: [0, 1],
+                translateX: [-20, 0],
+                duration: 500,
+                easing: 'easeOutExpo'
+            });
+        });
+
+        window.addEventListener('resize', () =&gt; {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        function animateLoop() {
+            requestAnimationFrame(animateLoop);
+            controls.update();
+            renderer.render(scene, camera);
+            
+            if (currentShadowTipPos) {
+                const vector = currentShadowTipPos.clone();
+                vector.project(camera);
+                
+                const x = (vector.x * .5 + .5) * container.clientWidth;
+                const y = (-(vector.y * .5) + .5) * container.clientHeight;
+                
+                shadowLabel.style.left = `${x}px`;
+                shadowLabel.style.top = `${y}px`;
+            }
+        }
+        animateLoop();
+
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;" frameborder="0">
+    </iframe>
+  </div>
+
+  <script>
+    function getIsMobile() {
+      const width = document.documentElement.clientWidth
+      const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|iPad|Windows Phone|Mobile/i.test(navigator.userAgent) || width <= 768
+      return isMobile
+    }
+
+    function adjustRem() {
+      const pcBaseWidth = 375
+      const width = document.documentElement.clientWidth
+      document.documentElement.style.fontSize = `${(width / pcBaseWidth * 100).toFixed(2)}px`
+    }
+
+    function checkAndHideButtonOnMobile() {
+      const isMobile = getIsMobile()
+      if (isMobile) {
+        adjustRem()
+      }
+      const iframeContainer = document.querySelector('.iframe-container');
+      if (iframeContainer) {
+        if (isMobile) {
+          iframeContainer.classList.add('mobile');
+        } else {
+          iframeContainer.classList.remove('mobile');
+        }
+      }
+    }
+
+    function handleResize() {
+      checkAndHideButtonOnMobile();
+      const isMobile = getIsMobile()
+      const iframeContainer = document.querySelector('.iframe-container');
+      if (iframeContainer) {
+        if (isMobile) {
+          iframeContainer.classList.add('mobile');
+        } else {
+          iframeContainer.classList.remove('mobile');
+        }
+      }
+    }
+
+    window.addEventListener('resize', handleResize);
+    document.addEventListener('DOMContentLoaded', checkAndHideButtonOnMobile);
+
+    function clearAllEvents() {
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('DOMContentLoaded', checkAndHideButtonOnMobile);
+    }
+    window.addEventListener('beforeunload', clearAllEvents);
+  </script>
+</body>
+</html>
